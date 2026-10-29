@@ -1,0 +1,16 @@
+extends: ./electron-builder.yml
+appId: com.gavinho.agentmonitor.inspector
+productName: Agent Monitor Token Inspector
+forceCodeSigning: true
+directories:
+  output: release-inspector
+artifactName: "token-inspector-${version}-${os}-${arch}.${ext}"
+mac:
+  type: development
+  # Private development builds validate the current certificate without a release timestamp.
+  timestamp: none
+  # Machine-specific certificate is supplied by package-inspector.mjs. Never fall back to ad-hoc.
+  identity: null
+  target:
+    - target: dir
+      arch: [arm64]

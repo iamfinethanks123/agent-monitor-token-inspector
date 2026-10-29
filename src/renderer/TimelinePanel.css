@@ -1,0 +1,28 @@
+.timeline-controls { display: flex; gap: 16px; flex-wrap: wrap; align-items: end; margin: 16px 0; }
+.timeline-controls>label { display: grid; gap: 6px; color: var(--muted); font-size: 11px; }
+.timeline-controls select,.timeline-advanced input { min-height: 34px; }
+.timeline-controls select { color: var(--text); background: var(--surface-2); border: 1px solid var(--border-strong); border-radius: 7px; padding: 8px 12px; font-size: 11px; }
+.timeline-controls>.inspector-checkbox { display: flex; align-items: center; padding-bottom: 8px; }
+.timeline-panel .inspector-search { max-width: none; width: 100%; box-sizing: border-box; }.timeline-panel .inspector-search input { flex: 1; min-width: 0; }.timeline-panel .inspector-search button { white-space: nowrap; flex-shrink: 0; }
+.timeline-advanced { margin: 16px 0; color: var(--muted); font-size: 11px; }
+.timeline-advanced summary { cursor: pointer; padding: 8px 0; }
+.timeline-summary { display: flex; flex-wrap: wrap; gap: 20px; padding: 16px 0; font-size: 11px; color: var(--muted); border-bottom: 1px solid var(--border); }
+.timeline-summary span:first-child { color: var(--text-strong); font-weight: 600; }
+.timeline-target,.timeline-update { padding: 12px 16px; background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; color: var(--muted); font-size: 11px; display: flex; gap: 20px; align-items: center; }
+.timeline-workspace { display: grid; grid-template-columns: 180px minmax(0,1fr); margin-top: 18px; border: 1px solid var(--border); border-radius: 9px; overflow: hidden; }
+.timeline-lanes { height: 560px; overflow-y: auto; background: var(--surface-2); border-right: 1px solid var(--border); padding: 9px; }
+.timeline-lanes button { width: 100%; text-align: left; display: grid; gap: 5px; padding: 11px; border: 1px solid transparent; border-radius: 6px; background: transparent; color: var(--muted); font-size: 11px; cursor: pointer; }
+.timeline-lanes button.is-active { border-color: var(--accent); background: var(--accent-wash); color: var(--text-strong); }
+.timeline-lanes strong { font-weight: 500; }.timeline-lanes small { font-size: 9px; }
+.timeline-viewport { height: 560px; overflow-y: auto; outline-offset: -3px; }
+.timeline-viewport:focus-visible { outline: 2px solid var(--focus); }
+.timeline-virtual-space { position: relative; }
+.timeline-row { position: absolute; width: 100%; display: grid; grid-template-columns: 82px 170px minmax(0,1fr); gap: 12px; align-items: center; padding: 12px 18px; text-align: left; border: 0; border-bottom: 1px solid var(--border-subtle); background: var(--surface); color: var(--text); cursor: pointer; }
+.timeline-row:hover,.timeline-row.is-selected { background: var(--surface-2); }.timeline-row.is-selected { box-shadow: inset 3px 0 var(--accent); }
+.timeline-rail { color: var(--muted); font-size: 9px; display: grid; gap: 7px; }.timeline-rail i { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }.timeline-gap .timeline-rail i,.timeline-error .timeline-rail i { background: var(--warning); }.timeline-compaction .timeline-rail i { background: var(--purple); }
+.timeline-stamp,.timeline-row-content { display: grid; gap: 8px; min-width: 0; }
+.timeline-stamp strong { font-size: 10px; font-weight: 500; }.timeline-row-content strong { font-size: 11px; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.timeline-row small { font-size: 9px; color: var(--muted); line-height: 1.45; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.timeline-detail { border: 1px solid var(--border); border-radius: 8px; padding: 18px; margin: 18px 0; background: var(--surface-2); font-size: 11px; overflow-wrap: anywhere; }
+.timeline-detail header { display: flex; justify-content: space-between; gap: 20px; }.timeline-detail header>div { display: grid; gap: 7px; }.timeline-detail small,.timeline-detail p { color: var(--muted); }.timeline-detail .inspector-link { margin-right: 20px; }
+@media(max-width:1150px) { .timeline-workspace { grid-template-columns: 135px minmax(0,1fr); }.timeline-row { grid-template-columns: 60px 128px minmax(0,1fr); gap: 9px; padding: 10px; } }

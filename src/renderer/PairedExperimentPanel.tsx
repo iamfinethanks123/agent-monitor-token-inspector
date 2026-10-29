@@ -1,0 +1,46 @@
+import { useEffect, useMemo, useState } from 'react';
+import type { ExperimentView, InspectorBridge } from '../shared/inspector';
+import { pairedComparison } from '../shared/paired-comparison';
+import { ReportPanel } from './ReportPanel';
+
+const labels: Record<string, [string, string]> = {
+  tokens: ['Token 總量', 'Total tokens'], uncachedInput: ['未快取 Input', 'Uncached input'], observedWindowMs: ['觀察時段', 'Observed span'], toolIntervalUnionMs: ['已記錄工具區間聯集', 'Recorded tool interval union'],
+  failedToolCalls: ['失敗工具操作', 'Failed tool calls'], retryCandidates: ['重試候選', 'Retry candidates'], compactionRecords: ['壓縮標記', 'Compaction markers'],
+  POPULATION_TRUNCATED: ['試驗人口未齊，未計算配對差異', 'Incomplete trial population; no paired differences calculated'], PAIRED_PROTOCOL_REQUIRED: ['需要已保存嘅配對比較規格', 'A saved paired protocol is required'], VARIANT_SELECTION_INVALID: ['請選擇兩個不同、已有試驗嘅變體', 'Select two distinct variants with recorded trials'],
+  INSUFFICIENT_TRIALS: ['完整配對數不足，只作描述', 'Too few complete pairs; descriptive only'], MULTIPLE_OR_UNDECLARED_CHANGES: ['多個變數或未聲明改動，只作描述', 'Multiple or undeclared changes; descriptive only'],
+  PAIR_ID_MISSING: ['Pair ID 未記錄', 'Pair ID unrecorded'], PAIR_SIDE_MISSING: ['配對缺少一邊', 'One side missing'], PAIR_DUPLICATED: ['同一 Pair ID 有重複試驗，唔任揀一筆', 'Duplicate pair members; no arbitrary selection'], QUALITY_NOT_ACCEPTED: ['有未驗收、失敗或排除試驗', 'Some trials failed, were excluded or remain unreviewed'],
+  CONTRACT_REVISION_MISMATCH: ['驗收版本不同', 'Contract revision differs'], FROZEN_CONDITIONS_MISMATCH: ['固定資料／環境條件不符', 'Frozen inputs/environment differ'], FIXED_CONDITIONS_MISMATCH: ['兩邊固定條件不同', 'Fixed conditions differ between sides'], CACHE_CONDITION_UNKNOWN: ['Cache 條件未知', 'Cache condition unknown'], UNCONTROLLED_FACTORS_RECORDED: ['有未控制因素，見原試驗', 'Uncontrolled factors recorded; see trials'], PRICE_SNAPSHOTS_DIFFER: ['價目快照不同', 'Price snapshots differ'],
+};
+const number = (value: string | null, signed = false) => {
+  if (value === null) return '—'; const negative = value.startsWith('-'); const [whole, fraction] = (negative ? value.slice(1) : value).split('.');
+  const digits = fraction?.replace(/0+$/, '');
+  return `${negative ? '-' : signed && value !== '0' ? '+' : ''}${BigInt(whole).toLocaleString('en-US')}${digits ? `.${digits}` : ''}`;
+};
+
+export function PairedExperimentPanel({ api, view, language }: { api: InspectorBridge; view: ExperimentView; language: 'zh' | 'en' }) {
+  const t = (zh: string, en: string) => language === 'zh' ? zh : en; const label = (key: string) => labels[key]?.[language === 'zh' ? 0 : 1] ?? (key.startsWith('api:') ? t('API 等值成本', 'API equivalent cost') : key);
+  const [contractId, setContractId] = useState(''); const [reference, setReference] = useState(''); const [candidate, setCandidate] = useState(''); const [metricKey, setMetricKey] = useState('tokens'); const [page, setPage] = useState(0);
+  const contract = view.contracts.find(item => item.id === contractId) ?? (view.contracts.length === 1 ? view.contracts[0] : undefined);
+  const variants = [...new Set(view.trials.filter(trial => trial.contractId === contract?.id).map(trial => trial.variant))];
+  const result = useMemo(() => contract && reference && candidate ? pairedComparison(contract, view.trials, { referenceVariant: reference, candidateVariant: candidate }, view.truncated) : undefined, [contract, view.trials, view.truncated, reference, candidate]);
+  const metric = result?.summaries.find(item => item.key === metricKey) ?? result?.summaries[0];
+  useEffect(() => { setPage(0); }, [contract?.id, reference, candidate, metric?.key]);
+  const pages = Math.max(1, Math.ceil((result?.pairs.length ?? 0) / 20)); const currentPage = Math.min(page, pages - 1);
+  return <section className="inspector-panel" aria-label="Paired trial differences">
+    <div className="inspector-panel-heading"><div><h2>{t('逐對比較試驗差異', 'Compare paired trial differences')}</h2><p>{t('差異＝比較變體減參考變體。負數代表該項資源較少，唔代表驗收較好或已證明節省。', 'Difference = candidate minus reference. A negative value means less of that resource, not better quality or proven savings.')}</p></div></div>
+    <div className="inspector-form-grid"><label>{t('驗收定義', 'Contract')}<select aria-label="Paired comparison contract" value={contract?.id ?? ''} onChange={event => { setContractId(event.target.value); setReference(''); setCandidate(''); }}><option value="">{t('選擇驗收定義', 'Select a contract')}</option>{view.contracts.map(item => <option key={item.id} value={item.id}>{item.objective.slice(0, 60)}</option>)}</select></label>
+      <label>{t('參考變體', 'Reference variant')}<select aria-label="Paired reference variant" value={variants.includes(reference) ? reference : ''} onChange={event => setReference(event.target.value)}><option value="">{t('明確選擇參考', 'Select the reference')}</option>{variants.map(name => <option key={name}>{name}</option>)}</select></label>
+      <label>{t('比較變體', 'Candidate variant')}<select aria-label="Paired candidate variant" value={variants.includes(candidate) ? candidate : ''} onChange={event => setCandidate(event.target.value)}><option value="">{t('選擇比較變體', 'Select a candidate')}</option>{variants.map(name => <option key={name}>{name}</option>)}</select></label></div>
+    {!result && <p>{t('先選擇驗收定義同兩個變體；原始試驗人口同排名保持。', 'Select a contract and two variants. The original trial population and ranking remain unchanged.')}</p>}
+    {result && <>{result.issues.map(issue => <p className="inspector-footnote" key={issue}>{label(issue)}</p>)}
+      {result.available && <><p role="status">{result.selectedTrials} {t('筆已選變體試驗', 'trials in selected variants')} · {result.pairs.length} {t('個配對群組', 'pair groups')} · {result.acceptedPairs} {t('對兩邊均已覆核成功', 'pairs accepted on both sides')}</p>
+        <div className="inspector-form-grid"><label>{t('比較資源', 'Resource')}<select aria-label="Paired comparison metric" value={metric?.key ?? 'tokens'} onChange={event => setMetricKey(event.target.value)}>{result.summaries.map(item => <option key={item.key} value={item.key}>{label(item.key)} · {item.unit}</option>)}</select></label></div>
+        {metric && <p className="inspector-footnote">{t('差異最低／中位／最高', 'Difference min / median / max')}: {number(metric.differences.minimum, true)} / {number(metric.differences.median, true)} / {number(metric.differences.maximum, true)} {metric.unit} · {metric.differences.count} {t('對有量測', 'measured pairs')} · {metric.differences.missing} {t('組差異未知', 'groups with unknown differences')}</p>}
+        <div className="inspector-table-scroll"><table className="inspector-table"><thead><tr><th>Pair ID</th><th>{t('參考', 'Reference')}</th><th>{t('比較', 'Candidate')}</th><th>{t('差異', 'Difference')} · {metric?.unit}</th><th>{t('驗收及限制', 'Quality and limits')}</th></tr></thead><tbody>{result.pairs.slice(currentPage * 20, (currentPage + 1) * 20).map(pair => { const value = pair.metrics.find(item => item.key === metric?.key); return <tr key={pair.id}><td>{pair.pairId ?? t('未配對', 'Unpaired')}<small>{pair.referenceIds.join(' · ') || '—'} → {pair.candidateIds.join(' · ') || '—'}</small></td><td>{number(value?.reference ?? null)}<small>{pair.referenceOutcome ?? 'unknown'}</small></td><td>{number(value?.candidate ?? null)}<small>{pair.candidateOutcome ?? 'unknown'}</small></td><td>{number(value?.delta ?? null, true)}{value?.delta == null && <small>{metric?.key.startsWith('api:') ? t('一邊未完整定價、缺少同幣資料或配對', 'Full same-currency pricing or pairing is missing on a side') : metric?.key === 'toolIntervalUnionMs' ? t('一邊缺少完整已記錄時間或配對', 'Complete recorded timing or pairing is missing on a side') : t('一邊缺少唯一配對或量測', 'A unique pair member or measurement is missing')}</small>}</td><td>{pair.accepted ? t('兩邊已覆核成功', 'Both accepted') : t('未通過雙邊驗收', 'Both-side acceptance not established')}{pair.issues.map(issue => <small key={issue}>{label(issue)}</small>)}<details><summary>{t('版本及價目', 'Versions and prices')}</summary><small>{t('參考帳本', 'Reference ledger')}: {pair.referenceRevisions.join(', ') || '—'} · {pair.referencePriceIds.join(', ') || t('未有價目快照', 'No price snapshot')}</small><small>{t('比較帳本', 'Candidate ledger')}: {pair.candidateRevisions.join(', ') || '—'} · {pair.candidatePriceIds.join(', ') || t('未有價目快照', 'No price snapshot')}</small><small>{result.version}</small></details></td></tr>; })}</tbody></table></div>
+        {pages > 1 && <div className="inspector-pagination"><button disabled={currentPage === 0} onClick={() => setPage(currentPage - 1)}>{t('上一頁', 'Previous')}</button><span>{currentPage + 1} / {pages} · 20 {t('組／頁', 'groups per page')}</span><button disabled={currentPage + 1 === pages} onClick={() => setPage(currentPage + 1)}>{t('下一頁', 'Next')}</button></div>}
+        <p className="inspector-footnote">{t('分佈保留有數字嘅失敗／排除試驗；缺少或重複配對嘅差異維持未知。價格用每筆試驗保存嘅快照、貨幣分開；工具時間只用完整已記錄區間。呢個係描述性差異，唔會更改勝出判斷或宣稱因果。', 'Distributions retain measured failed/excluded trials; missing or duplicated pair members leave differences unknown. Prices use each trial’s saved snapshot and separate currencies. Tool timing requires complete recorded intervals. These are descriptive differences; ranking is unchanged and no causality is claimed.')}</p>
+        <ReportPanel api={api} query={{ days: 0 }} language={language} initialContractId={contract!.id} pairedSelection={result.selection} />
+      </>}
+    </>}
+  </section>;
+}

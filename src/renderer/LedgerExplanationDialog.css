@@ -1,0 +1,20 @@
+.ledger-explanation-dialog { width: min(1100px, 95vw); }
+.ledger-explanation-dialog > header { position: sticky; top: -25px; z-index: 1; margin: -25px -25px 20px; padding: 20px 25px; border-bottom: 1px solid var(--border); background: var(--surface); }
+.ledger-explanation-dialog > header > div { min-width: 0; }
+.ledger-explanation-dialog > header small { overflow-wrap: anywhere; }
+.ledger-explanation-dialog > header > button { flex: 0 0 auto; }
+.ledger-explanation-dialog h3 { margin: 24px 0 8px; font-size: 13px; }
+.ledger-explanation-dialog td { overflow-wrap: anywhere; white-space: normal; min-width: 125px; }
+.ledger-explanation-dialog td:first-child { min-width: 220px; max-width: 360px; }
+.ledger-explanation-dialog td .inspector-link { display: block; margin-bottom: 8px; }
+.ledger-explanation-summary { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.ledger-explanation-summary > div { padding: 13px; border: 1px solid var(--border); border-radius: 6px; background: var(--surface-2); }
+.ledger-explanation-summary span { display: block; margin-bottom: 8px; color: var(--muted); font-size: 11px; }
+.ledger-explanation-summary strong { font-size: 15px; }
+.ledger-explanation-identity { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 10px; font-size: 11px; }
+.ledger-explanation-identity dt { color: var(--muted); }
+.ledger-explanation-identity dd { margin: 0; overflow-wrap: anywhere; }
+.ledger-explanation-history { display: grid; gap: 8px; }
+.ledger-explanation-history > div { display: grid; grid-template-columns: 100px minmax(0, 1fr); gap: 5px 12px; padding: 10px 12px; border: 1px solid var(--border); border-radius: 6px; font-size: 11px; }
+.ledger-explanation-history small { grid-column: 2; }
+@media (max-width: 700px) { .ledger-explanation-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); } .ledger-explanation-identity { grid-template-columns: 100px minmax(0, 1fr); } }

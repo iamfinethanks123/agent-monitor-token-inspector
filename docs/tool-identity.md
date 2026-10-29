@@ -1,0 +1,17 @@
+# 工具操作身份與檔案版本
+
+已重現同一來源被替換後沿用 Call ID，兩次工具操作合併成一筆；另一個案例會將旧版本输入同新版本输出错配。修正採用 `codex-tool/2`，身份包含工作區、Codex來源、檔案generation、Thread及Call ID。不同generation保持獨立，未配對事件維持未配對。
+
+工具詳情／排行、Context來源歸類、Retry同跨Agent比較使用相關generation；同一來源不同generation唔會延續上一段重讀／失敗候選。初始三個工具detector嘅候選身份及版本更新至2，舊feedback資料保留，唔會套用到身份已改變嘅候選。既有同generation鏡像Call ID嘅保守分析仍保留。
+
+工具索引係可重建read model。首次啟動新版會喺單一transaction內，用已保留觀察及目前有效來源分析重建，完成後先標記identity version2；唔讀原始檔案，亦唔修改原始觀察、usage ledger或價格。失敗會回退原有索引及版本。偵測舊程式寫返legacy工具ID時會再重建；一般重開唔重複重建。受影響cursor會失效，避免沿用舊人口嘅分頁。
+
+JSON／Markdown工具報告包含identity版本；CSV亦補齊adapter／policy／estimator／identity版本。官方Input、Cache、Reasoning同美元計法維持。
+
+25項相關回歸通過，包括鏡像、Retry、Context、來源generation、範圍及工具排行；最終8項identity／工具報告檢查通過。重建測試喺原始檔案已移除時仍可完成，讀目前分析而非舊normalized值；帳本、觀察／digest不變，重開idempotent，故意破壞fixture後重建失敗能rollback。Build／typecheck通過。
+
+原生第一次驗證嘅資料端已正確分開generation，最後子面板仍顯示舊數字而失敗：手動refresh亦使用10秒背景coalescing，超出fixture嘅5秒UI等待。已修正明確手動refresh會立即通知頁面讀取並清除待發背景timer；普通idle巡查及背景更新仍用原有策略。此處唔以延長等待作修正，最後native結果另記acceptance。
+
+metadata-only遠端wire冇工具索引，呢次唔擴大同步內容；Ubuntu／Windows client唔需要為本機工具索引修正重新部署。冇真正重新解析或取消用戶歷史，亦冇改來源logs、憑證、帳戶、用戶privacy政策或價格。
+
+最終native fixture原有排行／報告／暫停恢復／rotation通過，另有idle／append通過。實際資料庫已重建identity2／6,861工具記錄／0legacy ID；真實Context頁仍有執行／排隊逾時，未宣稱大型工具排行頁已全面恢復。總覽已返回並載入；後續優先處理真實Context讀取效能。

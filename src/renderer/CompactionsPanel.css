@@ -1,0 +1,16 @@
+.compaction-metrics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 18px 0; }
+.compaction-metrics > div { display: grid; gap: 6px; padding: 16px; border: 1px solid var(--border); border-radius: 10px; background: var(--surface); }
+.compaction-metrics span, .compaction-proxy span, .compaction-card small, .compaction-card dt { color: var(--muted); font-size: 12px; }
+.compaction-metrics strong { font-size: 28px; font-variant-numeric: tabular-nums; }
+.compaction-metrics small { color: var(--muted); line-height: 1.5; }
+.compaction-list { display: grid; gap: 14px; }
+.compaction-card { border: 1px solid var(--border); border-radius: 12px; padding: 18px; background: var(--surface); }
+.compaction-card header { display: flex; justify-content: space-between; gap: 12px; align-items: start; }
+.compaction-card header > div, .compaction-proxy > div { display: grid; gap: 6px; min-width: 0; }
+.compaction-proxy { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin: 18px 0; }
+.compaction-proxy b { font-size: 23px; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.compaction-change { border-inline: 1px solid var(--border); padding-inline: 16px; }
+.compaction-card dl { display: flex; flex-wrap: wrap; gap: 16px 28px; padding-block: 12px; border-top: 1px solid var(--border); }
+.compaction-card dd { margin: 4px 0 0; font-size: 13px; }
+.compaction-card footer { display: flex; flex-wrap: wrap; gap: 8px 14px; }
+@media (max-width: 800px) { .compaction-metrics, .compaction-proxy { grid-template-columns: 1fr; } .compaction-change { border-inline: 0; border-block: 1px solid var(--border); padding: 12px 0; } }

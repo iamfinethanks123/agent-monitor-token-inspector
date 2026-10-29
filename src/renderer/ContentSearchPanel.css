@@ -1,0 +1,9 @@
+.content-search-form { display: flex; align-items: end; gap: 14px; margin: 20px 0; }
+.content-search-form label { display: grid; gap: 8px; flex: 1; }
+.content-search-form input { width: 100%; padding: 12px; color: var(--text); background: var(--surface-2); border: 1px solid var(--border-strong); border-radius: 8px; }
+.content-search-results { display: grid; gap: 20px; }
+.content-search-results article { padding: 18px 0; border-top: 1px solid var(--border); }
+.content-search-results header, .content-search-results footer { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+.content-search-results pre { white-space: pre-wrap; overflow-wrap: anywhere; max-height: 24em; overflow: auto; padding: 14px; background: var(--surface-2); border-radius: 8px; }
+.content-search-results footer { color: var(--muted); font-size: 12px; }
+@media (max-width: 760px) { .content-search-form { align-items: stretch; flex-direction: column; } }

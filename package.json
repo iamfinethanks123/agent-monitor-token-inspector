@@ -1,6 +1,6 @@
 {
   "name": "agent-monitor",
-  "version": "0.1.0",
+  "version": "0.1.29",
   "private": true,
   "description": "Local dashboard for Codex, Claude Code, Pi, and Hermes agent traces",
   "author": "Melvin Vivas",
@@ -12,11 +12,13 @@
     "dev:web": "vite --host 127.0.0.1",
     "typecheck": "tsc --noEmit",
     "build:main": "node scripts/build-main.mjs",
-    "build": "npm run typecheck && vite build && npm run build:main",
+    "build": "npm run evaluate:detectors && npm run typecheck && vite build && npm run build:main",
     "start": "electron .",
     "test": "tsx --test tests/*.test.ts",
+    "evaluate:detectors": "tsx scripts/evaluate-detectors.ts",
     "test:smoke": "npm run build && node scripts/smoke.mjs",
     "dist": "npm run build && electron-builder --publish never",
+    "dist:inspector": "npm run build && node scripts/package-inspector.mjs",
     "screenshots": "npm run build && node scripts/screenshots.mjs"
   },
   "engines": {

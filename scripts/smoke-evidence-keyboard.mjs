@@ -1,0 +1,31 @@
+import { _electron as electron, expect } from '@playwright/test';
+import { mkdtemp, mkdir, writeFile, rm } from 'node:fs/promises';
+import path from 'node:path';
+import os from 'node:os';
+const root = await mkdtemp(path.join(os.tmpdir(), 'evidence-keyboard-')); const traces = path.join(root, 'traces'); const userData = path.join(root, 'data'); let app;
+try {
+  await mkdir(traces); await writeFile(path.join(traces, 'run.jsonl'), JSON.stringify({ type: 'token_usage_record', payload: { thread_id: 'evidence-keyboard', response_id: 'one', usage: { input_tokens: 10, cached_input_tokens: 0, output_tokens: 2 } } }) + '\n');
+  app = await electron.launch({ executablePath: path.resolve('node_modules/electron/dist/Electron.app/Contents/MacOS/Electron'), args: [process.cwd(), `--user-data-dir=${userData}`], env: { ...process.env, AGENT_MONITOR_TRACE_ROOT: traces, AGENT_MONITOR_USER_DATA: userData, ELECTRON_USER_DATA_DIR: userData, AGENT_MONITOR_RECEIVER_PORT: '0', ELECTRON_IS_DEV: '0' } });
+  const page = await app.firstWindow(); await page.getByRole('button', { name: /^(用量帳本|Usage ledger)$/, exact: true }).click();
+  const row = page.locator('.inspector-table tbody tr').first(); const source = row.getByRole('button', { name: /來源紀錄|observations/ });
+  await expect(source).toBeVisible({ timeout: 20000 });
+  const value = await page.evaluate(async () => { const entry = (await window.tokenInspector.ledger()).items[0]; return window.tokenInspector.evidence(entry.evidenceRefs[0]); });
+  await app.evaluate(({ ipcMain }, sample) => { ipcMain.removeHandler('inspector:evidence'); ipcMain.handle('inspector:evidence', async () => { await new Promise(resolve => setTimeout(resolve, 600)); return sample; }); }, value);
+  await source.click(); const dialog = page.getByRole('dialog', { name: 'Source evidence', exact: true }); const close = dialog.getByRole('button', { name: 'Close evidence', exact: true });
+  await expect(close).toBeFocused(); await page.waitForTimeout(700);
+  await page.keyboard.press('Tab'); await expect(close).toBeFocused();
+  await page.keyboard.press('Shift+Tab'); await expect(close).toBeFocused();
+  await page.keyboard.press('Escape'); await expect(dialog).toHaveCount(0); await expect(source).toBeFocused();
+  await source.click(); await expect(close).toBeFocused(); await page.keyboard.press('Escape');
+  await page.waitForTimeout(750); await expect(dialog).toHaveCount(0); await expect(source).toBeFocused();
+  await source.click(); await expect(close).toBeFocused(); await close.click();
+  await page.waitForTimeout(750); await expect(dialog).toHaveCount(0); await expect(source).toBeFocused();
+  const metric = row.locator('.inspector-number-button').first(); await metric.click();
+  const provenance = page.getByRole('dialog', { name: 'Metric provenance', exact: true });
+  await expect(provenance.getByRole('button').first()).toBeFocused();
+  await page.keyboard.press('Shift+Tab'); await expect(provenance.getByRole('button').last()).toBeFocused();
+  await page.keyboard.press('Tab'); await expect(provenance.getByRole('button').first()).toBeFocused();
+  await page.keyboard.press('Escape'); await expect(provenance).toHaveCount(0); await expect(metric).toBeFocused();
+  expect((await page.evaluate(() => window.tokenInspector.summary())).usage.total.value).toBe('12');
+  console.log('PASS: actual evidence/provenance dialogs contain Tab/ShiftTab focus, restore their original trigger after load/close, ignore delayed read afterEscape/button close and preserve12tokens; delay exists only inisolatedIPC');
+} finally { if (app) await app.close(); await rm(root, { recursive: true, force: true }); }

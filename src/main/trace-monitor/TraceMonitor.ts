@@ -327,10 +327,10 @@ export class TraceMonitor extends EventEmitter {
     watcher.on('unlink', (filePath) => {
       if (isTraceFile(filePath)) void this.enqueueDelete(filePath);
     });
-    if (process.platform === 'win32') {
-      // Windows writers can keep mtime unchanged until closing their handle.
-      // Chokidar filters these changes when atime is newer, even if size grew.
-      // Its raw notification still arrives; reconcile it through the same queue.
+    if (process.platform === 'win32' || process.platform === 'darwin') {
+      // Windows can delay mtime updates; macOS can suppress the first change
+      // after truncation. Raw notifications still arrive in both cases.
+      // Reconcile them through the same signature-checked queue.
       watcher.on('raw', (event, filePath, details: unknown) => {
         if (event !== 'change' || !this.started || this.watcher !== watcher) return;
         const watchedPath = objectValue(details)?.watchedPath;

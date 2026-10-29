@@ -1,0 +1,6 @@
+import type { InspectorQuery, TokenField } from './inspector';
+export type SourceAvailabilityState = 'present' | 'missing' | 'unreadable' | 'blocked' | 'outside_roots' | 'root_unavailable' | 'remote' | 'not_retained' | 'unavailable';
+export interface SourceAvailabilityView { measuredAt: string; items: { id: string; state: SourceAvailabilityState }[]; }
+export interface QualityCounts { records: number; supported: number; unsupported: number; gaps: number; semanticIssues: number; skippedBytes: string; lastSuccessfulReceipt: string | null; unknownKinds: number; }
+export interface QualitySource extends QualityCounts { id: string; machineId: string; threadId: string | null; generation: number; bytesProcessed: string; fileBytes: string | null; backlogBytes: string | null; sizeChanged: boolean; state: string; capabilityLimited: boolean; capabilities: string[]; schemaCount: number; }
+export interface DataQualityView { revision: number; measuredAt: string; scope: InspectorQuery; counts: QualityCounts; sources: QualitySource[]; sourceCount: number; sourceDetailsLimited: boolean; schemas: { fingerprint: string; records: number; unsupported: number }[]; schemaCount: number; schemaDetailsLimited: boolean; ledger: { selected: number; quarantined: number; additionalResponseSupports: string; missing: Record<TokenField, number> }; notes: string[]; }

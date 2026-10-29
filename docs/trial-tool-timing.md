@@ -1,0 +1,11 @@
+# 試驗快照嘅工具呼叫時間
+
+0.1.16將已索引工具呼叫嘅起迄時間保存到新試驗資源快照，補充F09／F13嘅時間量測。只用同一設備已配對而且有效嘅時間區間，排序後合併重疊區間，所以平行工具唔會重複加時間。呢個係已記錄呼叫區間聯集，唔係CPU時間、背景程序運行時間、整個任務wall clock或推算等待時間；唔會用ledger事件觀察窗去相減或夾限。
+
+每個快照包括knownUnionMs、已索引／已配對數目、缺少／無效時間數目、clockScope同recordedComplete。起迄倒退或無效時間唔計入已知聯集；缺少完成記錄亦唔用目前時間補終點。多設備時鐘未證實可合併，或statistics-only來源冇生命週期資料，時間保持未知。
+
+recordedComplete只表示呢個快照內全部已索引呼叫都有有效起迄同單一設備時鐘，唔證明所有實際工具活動都被觀察。比較頁分開顯示已知小計同覆蓋；時間分佈只納入recordedComplete嘅快照，其餘列未知。Token比較資格同品質門檻唔因為新增可選時間欄位而改動。舊試驗保持原來未知狀態，唔用之後補入嘅工具輸出改寫凍結快照。
+
+JSON、Markdown及Trials CSV包含時間同覆蓋欄位；Markdown亦記錄定義。CSV舊欄位順序保留，新欄位附加；延用既有escaping、Project匯出政策、固定revision及內容刪敏。任務完成、程序exit0同驗收成功仍保持分開；唔會由工具時間產生通用效率分數或保證節省量。
+
+驗證入口：tests/trialToolIntervals.test.ts及原有inspectorExperiments.test.ts。範圍包括平行聯集、缺少／倒退時間、跨設備未知、較後輸出唔改舊快照、時間分佈缺失人口、Token資格保持同JSON／MD／CSV輸出。實際隔離介面及安裝結果見STATE.md；完整native provider時鐘、所有平台及實際任務驗收未由以上案例推斷。

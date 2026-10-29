@@ -1,0 +1,6 @@
+.model-transitions-panel { margin-top: 18px; }
+.model-transitions-panel td { white-space: normal; overflow-wrap: anywhere; min-width: 180px; max-width: 420px; }
+.model-transitions-panel td:first-child { min-width: 160px; max-width: 260px; }
+.model-transitions-panel td strong { display: block; }
+.model-transitions-panel td .inspector-link { margin: 8px 10px 0 0; }
+.model-transitions-panel .inspector-footnote { overflow-wrap: anywhere; }

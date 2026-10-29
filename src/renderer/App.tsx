@@ -37,6 +37,8 @@ import {
   useReactFlow,
 } from '@xyflow/react';
 import type { NodeChange } from '@xyflow/react';
+import type { InspectorSummary, ManualUsdView } from '../shared/inspector';
+import { usdRangeText } from './UsdConversionPanel';
 import dagre from '@dagrejs/dagre';
 import {
   useCallback,
@@ -44,6 +46,7 @@ import {
   useMemo,
   useRef,
   useState,
+  type ReactNode,
 } from 'react';
 import type { CSSProperties } from 'react';
 import type {
@@ -466,6 +469,7 @@ function AgentNode({ data, selected }: NodeProps<AgentFlowNode>) {
   const model = agent.model || 'Model pending';
   const effort = agent.reasoningEffort || 'default';
   const isMain = agent.type === 'main';
+  const hasUsage = Boolean(agent.tokenUsage?.length || agent.stats.inputTokens || agent.stats.outputTokens);
 
   return (
     <article
@@ -497,8 +501,8 @@ function AgentNode({ data, selected }: NodeProps<AgentFlowNode>) {
       </div>
       <div className="agent-node__activity"><span>{agent.activity || 'Waiting for activity…'}</span></div>
       <div className="agent-node__metrics">
-        <div><span>IN</span><strong>{formatNumber(agent.stats.inputTokens)}</strong></div>
-        <div><span>OUT</span><strong>{formatNumber(agent.stats.outputTokens)}</strong></div>
+        <div><span>IN</span><strong>{hasUsage ? formatNumber(agent.stats.inputTokens) : '—'}</strong></div>
+        <div><span>OUT</span><strong>{hasUsage ? formatNumber(agent.stats.outputTokens) : '—'}</strong></div>
         <div><span>TOOLS</span><strong>{formatNumber(agent.stats.toolCalls)}</strong></div>
       </div>
       <footer className="agent-node__footer"><span>{agent.role || (isMain ? 'main agent' : agent.type)}</span><span>{formatRelative(agent.lastActivityAt)}</span></footer>
@@ -530,6 +534,7 @@ const nodeTypes = { agent: AgentNode };
 const edgeTypes = { spawn: SpawnEdge };
 
 type AgentGraphProps = {
+  visible?: boolean;
   runId?: string;
   agents: Agent[];
   edges: AgentEdge[];
@@ -538,7 +543,7 @@ type AgentGraphProps = {
   onOpenTrace?: (agent: Agent) => void;
 };
 
-function AgentGraph({ runId, agents, edges, selectedAgentId, onSelectAgent, onOpenTrace }: AgentGraphProps) {
+function AgentGraph({ visible = true, runId, agents, edges, selectedAgentId, onSelectAgent, onOpenTrace }: AgentGraphProps) {
   const { fitView, setCenter, setViewport, getNodes, getViewport } = useReactFlow();
   const shellRef = useRef<HTMLDivElement>(null);
   const [layoutNonce, setLayoutNonce] = useState(0);
@@ -554,6 +559,7 @@ function AgentGraph({ runId, agents, edges, selectedAgentId, onSelectAgent, onOp
   const [pulseIds, setPulseIds] = useState<Set<string>>(new Set());
 
   const visibleAgents = useMemo(() => agents.filter((agent) => !runId || agent.runId === runId), [agents, runId]);
+  const visibleAgentIds = JSON.stringify(visibleAgents.map(agent => agent.id));
   const visibleIds = useMemo(() => new Set(visibleAgents.map((agent) => agent.id)), [visibleAgents]);
   const visibleEdges = useMemo(() => edges.filter((edge) => visibleIds.has(edge.source) && visibleIds.has(edge.target)), [edges, visibleIds]);
   const visibleAgentsRef = useRef(visibleAgents);
@@ -567,7 +573,7 @@ function AgentGraph({ runId, agents, edges, selectedAgentId, onSelectAgent, onOp
   const frameGraph = useCallback((focusId?: string | null) => {
     const graphNodes = getNodes();
     const shell = shellRef.current;
-    if (!graphNodes.length || !shell) return;
+    if (!graphNodes.length || !shell || !shell.clientWidth || !shell.clientHeight) return;
     const xs = graphNodes.map((node) => node.position.x);
     const ys = graphNodes.map((node) => node.position.y);
     const width = Math.max(...graphNodes.map((node) => node.position.x + (node.measured?.width ?? NODE_WIDTH))) - Math.min(...xs);
@@ -666,10 +672,10 @@ function AgentGraph({ runId, agents, edges, selectedAgentId, onSelectAgent, onOp
   }, [layoutNonce, onOpenTrace, positionRevision, pulseIds, runId, selectedAgentId, visibleAgents, visibleEdges, visibleIds]);
 
   useEffect(() => {
-    if (!visibleAgents.length) return;
+    if (!visible || !visibleAgents.length) return;
     const timer = window.setTimeout(() => frameGraph(), 100);
     return () => window.clearTimeout(timer);
-  }, [frameGraph, runId]);
+  }, [frameGraph, runId, visible]);
 
   useEffect(() => {
     const previousIds = previousVisibleIdsRef.current;
@@ -678,7 +684,7 @@ function AgentGraph({ runId, agents, edges, selectedAgentId, onSelectAgent, onOp
     if (!receivedNewAgent || !previousIds.size || userMovedViewportRef.current) return;
     const timer = window.setTimeout(() => frameGraph(), 100);
     return () => window.clearTimeout(timer);
-  }, [frameGraph, visibleAgents, visibleIds]);
+  }, [frameGraph, visibleAgentIds]);
 
   useEffect(() => {
     if (!selectedAgentId || !visibleAgents.length) return;
@@ -719,6 +725,7 @@ function AgentGraph({ runId, agents, edges, selectedAgentId, onSelectAgent, onOp
 
   const onNodeClick = useCallback((_: React.MouseEvent, node: AgentFlowNode) => onSelectAgent(node.id), [onSelectAgent]);
 
+  if (!visible) return null;
   return (
     <div className="graph-shell" ref={shellRef}>
       <ReactFlow
@@ -757,7 +764,7 @@ function AgentGraph({ runId, agents, edges, selectedAgentId, onSelectAgent, onOp
   );
 }
 
-function EmptyGraph({ mode, selectedRun, loading, loadError, onDemo, onRetry }: { mode: SourceMode; selectedRun?: AgentRun; loading: boolean; loadError?: string; onDemo: () => void; onRetry?: () => void }) {
+function EmptyGraph({ mode, selectedRun, loading, loadError, onDemo, onRetry }: { mode: SourceMode; selectedRun?: AgentRun; loading: boolean; loadError?: string; onDemo?: () => void; onRetry?: () => void }) {
   const bridgeUnavailable = mode === 'offline';
   const noRunSelected = !bridgeUnavailable && !selectedRun && !loading && !loadError;
   const title = loading
@@ -776,15 +783,15 @@ function EmptyGraph({ mode, selectedRun, loading, loadError, onDemo, onRetry }: 
       : noRunSelected
         ? 'Choose a recent run from the sidebar to inspect its agents. Startup only loads the lightweight run inventory.'
         : bridgeUnavailable
-          ? 'The desktop bridge is not available in this browser session. Connect the monitor bridge or load a sample graph to explore the workspace.'
+          ? 'The desktop trace monitor is unavailable. Reopen the app or check the authorized trace sources.'
           : 'The run is loaded, but no agent records are available yet.';
   return (
     <div className="empty-state">
       {(loading || loadError) && <div className="empty-state__glyph">{loading ? <LoaderCircle size={34} strokeWidth={1.4} className="spin" /> : <TriangleAlert size={34} strokeWidth={1.4} />}</div>}
       <h2>{title}</h2>
       <p>{description}</p>
-      {loadError && onRetry ? <button type="button" className="button button--primary" onClick={onRetry}><RefreshCw size={15} />Retry loading run</button> : <button type="button" className="button button--primary" onClick={onDemo}><Play size={15} fill="currentColor" />Load demo mode</button>}
-      <span className="empty-state__caption">Demo mode uses local sample data and is clearly marked above.</span>
+      {loadError && onRetry ? <button type="button" className="button button--primary" onClick={onRetry}><RefreshCw size={15} />Retry loading run</button> : onDemo ? <button type="button" className="button button--primary" onClick={onDemo}><Play size={15} fill="currentColor" />Load demo mode</button> : null}
+      {onDemo && <span className="empty-state__caption">Demo mode uses local sample data and is clearly marked above.</span>}
     </div>
   );
 }
@@ -848,10 +855,10 @@ function AgentDetails({ agent, onClose, onExpand, mode }: { agent?: Agent; onClo
           setLoadingTrace(false);
         }
       })
-      .catch(() => {
+      .catch(error => {
         if (!cancelled && requestId === requestIdRef.current) {
           setTrace([]);
-          setTraceError('Trace could not be loaded from the native monitor.');
+          setTraceError(String(error?.message).includes('PROJECT_SOURCE_PREVIEW_BLOCKED') ? 'Project privacy settings block this raw trace preview.' : 'Trace could not be loaded from the native monitor.');
           setLoadingTrace(false);
         }
       });
@@ -878,7 +885,7 @@ function AgentDetails({ agent, onClose, onExpand, mode }: { agent?: Agent; onClo
   );
 }
 
-function Sidebar({ runs, agents, selectedRunId, loadedRunId, runTokenSummaries, onSelectRun, onDemo, usingDemo, watching, errors, loadingRunId }: { runs: AgentRun[]; agents: Agent[]; selectedRunId?: string; loadedRunId?: string; runTokenSummaries: Record<string, RunTokenSummary>; onSelectRun: (id: string) => void; onDemo: () => void; usingDemo: boolean; watching: boolean; errors: string[]; loadingRunId?: string }) {
+function Sidebar({ runs, agents, selectedRunId, loadedRunId, runTokenSummaries, onSelectRun, onDemo, usingDemo, watching, errors, loadingRunId }: { runs: AgentRun[]; agents: Agent[]; selectedRunId?: string; loadedRunId?: string; runTokenSummaries: Record<string, RunTokenSummary>; onSelectRun: (id: string) => void; onDemo?: () => void; usingDemo: boolean; watching: boolean; errors: string[]; loadingRunId?: string }) {
   const watcherTitle = usingDemo ? 'Demo stream' : watching ? 'Trace watcher' : 'Watcher paused';
   const watcherSubtitle = usingDemo ? 'sample data loaded' : errors.length ? `${errors.length} monitor issue${errors.length === 1 ? '' : 's'}` : watching ? 'listening locally' : 'monitor connected';
   return (
@@ -919,15 +926,18 @@ function Sidebar({ runs, agents, selectedRunId, loadedRunId, runTokenSummaries, 
         </div>
         {!runs.length && <div className="sidebar__empty">No runs discovered yet.</div>}
       </div>
-      <div className="sidebar__bottom"><div className="sidebar__watching"><span className={`watching-dot ${usingDemo ? 'watching-dot--demo' : ''} ${!usingDemo && errors.length ? 'watching-dot--warning' : ''}`} /><div><strong>{watcherTitle}</strong><span>{watcherSubtitle}</span></div><button type="button" title="Load demo stream" onClick={onDemo}>Demo</button></div><div className="sidebar__tip"><span>Click an agent to inspect its normalized trace.</span></div></div>
+      <div className="sidebar__bottom"><div className="sidebar__watching"><span className={`watching-dot ${usingDemo ? 'watching-dot--demo' : ''} ${!usingDemo && errors.length ? 'watching-dot--warning' : ''}`} /><div><strong>{watcherTitle}</strong><span>{watcherSubtitle}</span></div>{onDemo && <button type="button" title="Load demo stream" onClick={onDemo}>Demo</button>}</div><div className="sidebar__tip"><span>Click an agent to inspect its normalized trace.</span></div></div>
     </aside>
   );
 }
 
-function App() {
+function App({ liveOnly = false, embedded = false, active = true, canonicalSummary, canonicalUsd, currency = 'tokens', onCurrencyChange, accountingScope = 'run', onAccountingScopeChange, taskAcceptance, onInspectUsage, language = 'en', onRunSelected }: { liveOnly?: boolean; embedded?: boolean; active?: boolean; canonicalSummary?: InspectorSummary; canonicalUsd?: ManualUsdView; currency?: 'USD' | 'tokens'; onCurrencyChange?: (value: 'USD' | 'tokens') => void; accountingScope?: 'run' | 'exclusive' | 'inclusive'; onAccountingScopeChange?: (agent: Agent | undefined, mode: 'exclusive' | 'inclusive') => void; taskAcceptance?: ReactNode; onInspectUsage?: () => void; language?: 'zh' | 'en'; onRunSelected?: (run: AgentRun, root: Agent) => void }) {
   const [traceTabs, setTraceTabs] = useState<Agent[]>([]);
   const [activeTraceId, setActiveTraceId] = useState<string | null>(null);
   const [runTokenSummaries, setRunTokenSummaries] = useState<Record<string, RunTokenSummary>>({});
+  const [agentSearchOpen, setAgentSearchOpen] = useState(false);
+  const [agentSearch, setAgentSearch] = useState('');
+  const agentSearchButton = useRef<HTMLButtonElement>(null);
   const openTrace = useCallback((agent: Agent) => {
     setTraceTabs(tabs => tabs.some(tab => tab.id === agent.id) ? tabs : [...tabs, agent]);
     setActiveTraceId(agent.id);
@@ -941,6 +951,8 @@ function App() {
   };
   const { snapshot: sourceSnapshot, mode, setDemo, setLive, usingDemo, loadedRunId, loadingRunId, runLoadError, loadRun } = useMonitorSnapshot();
   const { providerFilter, selectedRunId, selectedAgentId, setProviderFilter, selectRun, selectAgent } = useDashboardStore();
+  useEffect(() => window.agentMonitor?.onPrivacyChanged?.(() => { setTraceTabs([]); setActiveTraceId(null); selectAgent(null); setAgentSearchOpen(false); setAgentSearch(''); }), [selectAgent]);
+  useEffect(() => { setAgentSearchOpen(false); setAgentSearch(''); }, [selectedRunId, providerFilter]);
 
   const runs = useMemo(() => [...sourceSnapshot.runs].filter((run) => providerFilter === 'all' || run.harness === providerFilter).sort(runSort), [providerFilter, sourceSnapshot.runs]);
   const selectedRun = runs.find((run) => run.id === selectedRunId);
@@ -994,11 +1006,17 @@ function App() {
     selectAgent(null);
   }, [agents, selectedAgentId, selectAgent]);
 
+  useEffect(() => { if (active && accountingScope !== 'run' && onAccountingScopeChange) onAccountingScopeChange(selectedAgent, accountingScope); }, [active, accountingScope, selectedAgent, onAccountingScopeChange]);
+
   const runIsLoaded = Boolean(selectedRun && loadedRunId === selectedRun.id);
   const runAgents = runIsLoaded && selectedRun ? agents.filter((agent) => agent.runId === selectedRun.id) : [];
   const runEdges = selectedRun ? sourceSnapshot.edges.filter((edge) => runAgents.some((agent) => agent.id === edge.source) && runAgents.some((agent) => agent.id === edge.target)) : [];
   const hasGraph = Boolean(runIsLoaded && runAgents.length);
-  const showRunTokens = hasGraph && loadingRunId !== selectedRun?.id;
+  const taskTitle = selectedRun?.title || selectedRun?.cwd?.split('/').filter(Boolean).pop() || (language === 'zh' ? '選取一個任務開始查看' : 'Choose a task to inspect');
+  const matchedUsd = canonicalUsd?.revision === canonicalSummary?.revision ? canonicalUsd : undefined;
+  const agentSearchMatches = runAgents.filter(agent => [agent.nickname, agent.role, agent.model, agent.status, agent.id, agent.threadId, agent.sessionId, agent.harness].some(value => value?.toLowerCase().includes(agentSearch.trim().toLowerCase())));
+  const closeAgentSearch = () => { setAgentSearchOpen(false); agentSearchButton.current?.focus(); };
+  const showRunTokens = hasGraph && loadingRunId !== selectedRun?.id && runAgents.some(agent => agent.tokenUsage?.length || agent.stats.inputTokens || agent.stats.outputTokens);
   const watcherLive = mode === 'live' && sourceSnapshot.watching;
   const monitorHasErrors = mode !== 'demo' && sourceSnapshot.errors.length > 0;
   const isWatching = watcherLive || mode === 'demo';
@@ -1013,12 +1031,13 @@ function App() {
           : 'CONNECTED';
 
   const handleDemo = useCallback(() => {
+    if (liveOnly) return;
     setTraceTabs([]);
     setActiveTraceId(null);
     setDemo();
     selectRun(DEMO_SNAPSHOT.runs[0]?.id);
     selectAgent(null);
-  }, [selectAgent, selectRun, setDemo]);
+  }, [liveOnly, selectAgent, selectRun, setDemo]);
 
   const handleRunSelect = useCallback((runId: string) => {
     setTraceTabs([]);
@@ -1027,6 +1046,16 @@ function App() {
     selectAgent(null);
     void loadRun(runId);
   }, [loadRun, selectAgent, selectRun]);
+
+  useEffect(() => {
+    if (liveOnly && mode === 'live' && !selectedRunId && !loadingRunId && runs[0]) handleRunSelect(runs[0].id);
+  }, [liveOnly, mode, selectedRunId, loadingRunId, runs, handleRunSelect]);
+
+  useEffect(() => {
+    if (!active || !runIsLoaded || !selectedRun || !onRunSelected) return;
+    const root = runAgents.find(agent => agent.id === selectedRun.rootAgentId) ?? runAgents.find(agent => agent.parentId === null);
+    if (root) onRunSelected(selectedRun, root);
+  }, [active, runIsLoaded, selectedRun, runAgents, onRunSelected]);
 
   const handleReturnLive = useCallback(() => {
     setTraceTabs([]);
@@ -1037,10 +1066,10 @@ function App() {
   }, [selectAgent, selectRun, setLive]);
 
   return (
-    <div className="app-shell">
-      {!expandedAgent && <Sidebar runs={runs} agents={agents} selectedRunId={selectedRun?.id} loadedRunId={loadedRunId} runTokenSummaries={runTokenSummaries} onSelectRun={handleRunSelect} onDemo={handleDemo} usingDemo={usingDemo} watching={sourceSnapshot.watching} errors={sourceSnapshot.errors} loadingRunId={loadingRunId} />}
+    <div className={`app-shell ${embedded ? 'app-shell--embedded' : ''}`}>
+      {!embedded && !expandedAgent && <Sidebar runs={runs} agents={agents} selectedRunId={selectedRun?.id} loadedRunId={loadedRunId} runTokenSummaries={runTokenSummaries} onSelectRun={handleRunSelect} onDemo={liveOnly ? undefined : handleDemo} usingDemo={usingDemo} watching={sourceSnapshot.watching} errors={sourceSnapshot.errors} loadingRunId={loadingRunId} />}
       <main className="workspace">
-        <header className="topbar"><div className="topbar__context"><span className="topbar__section-label">Workspace</span><span className="topbar__slash">/</span><span className="topbar__current">{selectedRun?.cwd?.split('/').filter(Boolean).pop() || 'Agent activity'}</span></div><div className="topbar__controls"><ThemeSelector /><Dropdown label="Provider" value={providerFilter} options={PROVIDERS.map(provider => ({ value: provider.value, label: provider.label }))} onChange={value => setProviderFilter(value as ProviderFilter)} /><Dropdown label="Run" value={selectedRun?.id ?? ''} placeholder="Select a run" wide options={runs.map(run => ({ value: run.id, label: run.title || run.cwd?.split('/').filter(Boolean).pop() || 'workspace', description: `${providerLabel(run.harness)} · ${runAgentCount(run, agents)} agents · ${formatRelative(run.lastActivityAt ?? run.startedAt)}` }))} onChange={handleRunSelect} /><span className={`live-badge live-badge--${mode} ${monitorHasErrors ? 'live-badge--warning' : ''}`}>{isWatching ? <Radio size={13} className="live-badge__radio" /> : monitorHasErrors ? <TriangleAlert size={13} /> : <CircleDot size={13} />}{statusLabel}</span>{usingDemo && <button type="button" className="button button--tiny" onClick={handleReturnLive} disabled={!window.agentMonitor}>Return to live</button>}</div></header>
+        <header className={`topbar ${embedded ? 'task-studio-header' : ''}`}><div className="topbar__context">{embedded ? <div className="task-studio-title"><h2 title={taskTitle}>{taskTitle}</h2><p>{language === 'zh' ? '同一任務嘅 Agent、用量及 Trace' : 'Agents, usage and traces for this task'}</p></div> : <><span className="topbar__section-label">Workspace</span><span className="topbar__slash">/</span><span className="topbar__current">{selectedRun?.cwd?.split('/').filter(Boolean).pop() || 'Agent activity'}</span></>}</div><div className="topbar__controls">{!embedded && <ThemeSelector />}<Dropdown label="Provider" value={providerFilter} options={PROVIDERS.map(provider => ({ value: provider.value, label: provider.label }))} onChange={value => setProviderFilter(value as ProviderFilter)} /><Dropdown label="Run" value={selectedRun?.id ?? ''} placeholder="Select a run" wide options={runs.map(run => ({ value: run.id, label: run.title || run.cwd?.split('/').filter(Boolean).pop() || 'workspace', description: `${providerLabel(run.harness)} · ${runAgentCount(run, agents)} agents · ${formatRelative(run.lastActivityAt ?? run.startedAt)}` }))} onChange={handleRunSelect} /><span className={`live-badge live-badge--${mode} ${monitorHasErrors ? 'live-badge--warning' : ''}`}>{isWatching ? <Radio size={13} className="live-badge__radio" /> : monitorHasErrors ? <TriangleAlert size={13} /> : <CircleDot size={13} />}{statusLabel}</span>{usingDemo && <button type="button" className="button button--tiny" onClick={handleReturnLive} disabled={!window.agentMonitor}>Return to live</button>}</div></header>
         {traceTabs.length > 0 && <div className="workspace-tabs" role="tablist" aria-label="Workspace views" onKeyDown={event => {
           if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
           const tabs = Array.from(event.currentTarget.querySelectorAll<HTMLButtonElement>('[role="tab"]'));
@@ -1057,11 +1086,17 @@ function App() {
           </div>)}
         </div>}
         <div id="graph-panel" className="workspace-graph-view" style={expandedAgent ? { display: 'none' } : undefined}>
-        <div className="workspace__subbar"><div><h1>Agent topology</h1><p>{selectedRun && runIsLoaded ? `${runAgents.length} agents · ${runEdges.length} spawn relationships` : selectedRun ? 'Select run loading in progress' : 'Select a run to load its agents'}</p></div><div className="workspace__subbar-center">{showRunTokens && <RunTokenDetails key={selectedRun?.id} agents={runAgents} />}</div><div className="workspace__subbar-right"><span className="refresh-label"><RefreshCw size={12} className={isWatching ? 'refresh-label__spin' : ''} />{monitorHasErrors ? `${sourceSnapshot.errors.length} monitor issue${sourceSnapshot.errors.length === 1 ? '' : 's'}` : loadingRunId ? 'Loading selected run' : isWatching ? `Updated ${formatRelative(selectedRun?.lastActivityAt)}` : mode === 'live' ? 'Watcher paused' : 'Waiting for monitor'}</span><button type="button" className="icon-button icon-button--search" title="Search agents"><Search size={16} /></button></div></div>
+        <div className="workspace__subbar"><div className={embedded ? 'task-studio-topology' : undefined}>{embedded ? <><Network size={20} /><div><h3>{language === 'zh' ? 'Agent 協作' : 'Agent collaboration'}</h3><p>{hasGraph ? `${runAgents.length} ${language === 'zh' ? '個 Agent' : 'agents'} · ${runEdges.length} ${language === 'zh' ? '條建立關係' : 'spawn relationships'}` : language === 'zh' ? '選取任務後載入實際關係' : 'Choose a task to load its relationships'}</p></div></> : <><h1>Agent topology</h1><p>{selectedRun && runIsLoaded ? `${runAgents.length} agents · ${runEdges.length} spawn relationships` : selectedRun ? 'Select run loading in progress' : 'Select a run to load its agents'}</p></>}</div><div className="workspace__subbar-center">{embedded && selectedRun?.harness === 'codex' ? <div className="inspector-graph-usage" aria-label="Task reconciled usage"><div className="task-studio-amount"><span>{currency === 'USD' ? matchedUsd?.price?.mode && matchedUsd.price.mode !== 'automatic' ? language === 'zh' ? '自訂美元情境' : 'Custom USD scenario' : language === 'zh' ? 'API 等值估算' : 'API-equivalent estimate' : language === 'zh' ? '核對帳本總數' : 'Reconciled total'}</span><strong>{currency === 'USD' ? usdRangeText(matchedUsd?.amount?.replace('.', '') ?? null, matchedUsd?.upperAmount?.replace('.', '') ?? null) : canonicalSummary?.usage.total.value == null ? '—' : BigInt(canonicalSummary.usage.total.value).toLocaleString('en-US')}</strong><small>{currency === 'USD' ? matchedUsd?.unpricedEntries ? `${matchedUsd.unpricedEntries} ${matchedUsd.pricedEntries ? language === 'zh' ? '筆未定價；只計可換算部分' : 'unpriced; priced portion only' : language === 'zh' ? '筆未能換算；查看模型或用量欄位' : 'unpriced; inspect model or usage fields'}` : language === 'zh' ? '情境估算，唔係訂閱帳單' : 'Scenario estimate, not a subscription bill' : 'tokens'}</small></div><div className="task-studio-components">{(['input', 'output'] as const).map(field => <span key={field}>{field === 'input' ? language === 'zh' ? '輸入 Token' : 'Input tokens' : language === 'zh' ? '輸出 Token' : 'Output tokens'}<strong>{canonicalSummary?.usage[field].value == null ? '—' : BigInt(canonicalSummary.usage[field].value!).toLocaleString('en-US')}</strong></span>)}</div><div className="task-studio-usage-actions">{onAccountingScopeChange && <select aria-label="Task accounting scope" value={accountingScope} onChange={event => onAccountingScopeChange(event.target.value === 'run' ? undefined : selectedAgent, event.target.value === 'inclusive' ? 'inclusive' : 'exclusive')}><option value="run">{language === 'zh' ? '整個任務（包括子 Agent）' : 'Whole task, including descendants'}</option><option value="exclusive" disabled={!selectedAgent?.threadId}>{language === 'zh' ? '已選 Agent 自己' : 'Selected agent only'}</option><option value="inclusive" disabled={!selectedAgent?.threadId}>{language === 'zh' ? '已選 Agent 及子 Agent' : 'Selected agent and descendants'}</option></select>}{onCurrencyChange && <div className="task-studio-unit" role="group" aria-label="Task display unit"><button aria-pressed={currency === 'USD'} onClick={() => onCurrencyChange('USD')}>USD</button><button aria-pressed={currency === 'tokens'} onClick={() => onCurrencyChange('tokens')}>Token</button></div>}<button className="inspector-link" onClick={onInspectUsage}>{language === 'zh' ? '核對帳本' : 'Inspect ledger'}</button>{showRunTokens && <RunTokenDetails key={selectedRun?.id} agents={runAgents} sourceLabel={language === 'zh' ? 'Trace 用量詳情（來源數字）' : 'Trace usage details (source figures)'} />}</div></div> : showRunTokens && <RunTokenDetails key={selectedRun?.id} agents={runAgents} />}</div><div className="workspace__subbar-right"><span className="refresh-label"><RefreshCw size={12} className={isWatching ? 'refresh-label__spin' : ''} />{monitorHasErrors ? `${sourceSnapshot.errors.length} monitor issue${sourceSnapshot.errors.length === 1 ? '' : 's'}` : loadingRunId ? 'Loading selected run' : isWatching ? `Updated ${formatRelative(selectedRun?.lastActivityAt)}` : mode === 'live' ? 'Watcher paused' : 'Waiting for monitor'}</span><button type="button" ref={agentSearchButton} className="icon-button icon-button--search" title={language === 'zh' ? '搜尋 Agent' : 'Search agents'} aria-expanded={agentSearchOpen} aria-controls="agent-search-panel" disabled={!hasGraph || Boolean(loadingRunId)} onClick={() => setAgentSearchOpen(value => !value)}><Search size={16} /></button></div></div>
+        {taskAcceptance}
+        {agentSearchOpen && <section id="agent-search-panel" className="agent-search-panel" aria-label={language === 'zh' ? '搜尋目前任務嘅 Agent' : 'Search agents in this run'} onKeyDown={event => { if (event.key === 'Escape') { event.preventDefault(); closeAgentSearch(); } }}>
+          <div className="agent-search-panel__controls"><Search size={15} /><input type="search" autoFocus aria-label={language === 'zh' ? 'Agent 名稱、角色、模型、狀態或 ID' : 'Agent name, role, model, status or ID'} placeholder={language === 'zh' ? '搜尋名稱、角色、模型、狀態或 ID' : 'Search name, role, model, status or ID'} value={agentSearch} onChange={event => setAgentSearch(event.target.value)} /><button type="button" className="icon-button" aria-label={language === 'zh' ? '關閉 Agent 搜尋' : 'Close agent search'} onClick={closeAgentSearch}><X size={15} /></button></div>
+          <p role="status">{agentSearchMatches.length} / {runAgents.length} {language === 'zh' ? '符合；點選結果定位節點，完整拓撲同用量維持不變。' : 'matches; select a result to focus its node. Full topology and usage are preserved.'}{agentSearchMatches.length > 20 && (language === 'zh' ? ' 顯示首 20 個，輸入更多字可縮窄搜尋。' : ' Showing the first 20; refine your search for more.')}</p>
+          <div className="agent-search-panel__results">{agentSearchMatches.slice(0, 20).map(agent => <button type="button" key={agent.id} onClick={() => { selectAgent(agent.id); closeAgentSearch(); }}><strong>{agent.nickname || agent.role || agent.id}</strong><span>{agent.model || '—'} · {agent.status} · {agent.id}</span></button>)}</div>
+        </section>}
         {monitorHasErrors && <div className="monitor-error-strip" role="status"><TriangleAlert size={14} /><span><strong>Monitor issue{sourceSnapshot.errors.length === 1 ? '' : 's'}:</strong> {sourceSnapshot.errors[0]}</span>{sourceSnapshot.errors.length > 1 && <span className="monitor-error-strip__count">+{sourceSnapshot.errors.length - 1} more</span>}</div>}
         <div className="workspace__body">
           <section className={`canvas-panel ${selectedAgent ? 'canvas-panel--with-details' : ''}`}>
-            {hasGraph ? <AgentGraph runId={selectedRun?.id} agents={runAgents} edges={runEdges} selectedAgentId={selectedAgentId} onSelectAgent={selectAgent} onOpenTrace={openTrace} /> : <EmptyGraph mode={mode} selectedRun={selectedRun} loading={Boolean(loadingRunId && loadingRunId === selectedRun?.id)} loadError={selectedRun?.id === selectedRunId ? runLoadError : undefined} onDemo={handleDemo} onRetry={selectedRun ? () => handleRunSelect(selectedRun.id) : undefined} />}
+            {hasGraph ? <AgentGraph visible={active && !expandedAgent} runId={selectedRun?.id} agents={runAgents} edges={runEdges} selectedAgentId={selectedAgentId} onSelectAgent={selectAgent} onOpenTrace={openTrace} /> : <EmptyGraph mode={mode} selectedRun={selectedRun} loading={Boolean(loadingRunId && loadingRunId === selectedRun?.id)} loadError={selectedRun?.id === selectedRunId ? runLoadError : undefined} onDemo={liveOnly ? undefined : handleDemo} onRetry={selectedRun ? () => handleRunSelect(selectedRun.id) : undefined} />}
           </section>
           {selectedAgent && <AgentDetails agent={selectedAgent} onClose={() => selectAgent(null)} onExpand={openTrace} mode={mode} />}
         </div>

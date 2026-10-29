@@ -1,0 +1,44 @@
+import { _electron as electron, expect } from '@playwright/test';
+import { mkdtemp, mkdir, writeFile, appendFile, rm } from 'node:fs/promises';
+import path from 'node:path';
+import os from 'node:os';
+import { spawnSync } from 'node:child_process';
+
+const root = await mkdtemp(path.join(os.tmpdir(), 'content-native-')), traces = path.join(root, 'traces'), userData = path.join(root, 'user-data');
+const executable = path.resolve('node_modules/electron/dist/Electron.app/Contents/MacOS/Electron'); let app;
+const lines = rows => rows.map(row => JSON.stringify(row)).join('\n') + '\n';
+try {
+  await mkdir(traces); await mkdir(path.join(userData, 'inspector'), { recursive: true }); const file = path.join(traces, 'run.jsonl');
+  const message = text => ({ type: 'response_item', timestamp: new Date().toISOString(), payload: { type: 'message', role: 'user', content: [{ type: 'input_text', text }] } });
+  await writeFile(file, lines([{ type: 'session_meta', payload: { id: 'content-native', cwd: '/content-native-project', model_provider: 'openai' } }, message('Historical native excerpt'), { type: 'token_usage_record', payload: { thread_id: 'content-native', response_id: 'a', usage: { input_tokens: 10, output_tokens: 2 } } }]));
+  const seed = spawnSync(executable, ['--import', 'tsx', '--input-type=module', '-e', "import {InspectorStore} from './src/storage/InspectorStore.ts';import {IndexCollector} from './src/collector/IndexCollector.ts';const s=new InspectorStore(process.argv[1]);try{await new IndexCollector(s,[process.argv[2]],'content-native-fixture-key').scan();}finally{s.close();}", path.join(userData, 'inspector', 'index.sqlite'), traces], { env: { ...process.env, ELECTRON_RUN_AS_NODE: '1' }, encoding: 'utf8' });
+  if (seed.status !== 0) throw new Error(seed.stderr);
+  app = await electron.launch({ executablePath: executable, args: [process.cwd(), `--user-data-dir=${userData}`], env: { ...process.env, AGENT_MONITOR_TRACE_ROOT: traces, AGENT_MONITOR_USER_DATA: userData, ELECTRON_USER_DATA_DIR: userData, AGENT_MONITOR_RECEIVER_PORT: '0', ELECTRON_IS_DEV: '0' } });
+  const page = await app.firstWindow(); const errors = []; page.on('pageerror', error => errors.push(error.message));
+  await expect(page.locator('.inspector-hero strong').first()).toHaveText('12 tokens', { timeout: 20000 });
+  await page.getByRole('button', { name: /^(設定與私隱|Settings & privacy)$/, exact: true }).click();
+  const project = await page.evaluate(async () => (await window.tokenInspector.privacy()).projects.find(p => p.id !== '(unknown)').id);
+  await page.getByLabel('Privacy project').selectOption(project);
+  await expect(page.getByLabel('Project local text retention')).not.toBeChecked();
+  await app.evaluate(({ dialog }) => { globalThis.contentDialogs = []; dialog.showMessageBox = async (_window, options) => { globalThis.contentDialogs.push(options); return { response: 0 }; }; });
+  await page.getByLabel('Project local text retention').check(); await page.getByRole('button', { name: /保存 Project 設定|Save project settings/ }).click();
+  await expect.poll(async () => page.evaluate(async id => (await window.tokenInspector.privacy()).projects.find(p => p.id === id).policy.contentDays, project)).toBe(0);
+  const cancelled = await app.evaluate(() => globalThis.contentDialogs); expect(cancelled.length).toBe(1); expect(cancelled[0].defaultId).toBe(0); expect(cancelled[0].detail).toContain('8 KiB');
+  await app.evaluate(({ dialog }) => { dialog.showMessageBox = async (_window, options) => { globalThis.contentDialogs.push(options); return { response: 1 }; }; });
+  await page.getByLabel('Project local text retention').check(); await page.getByLabel('Project content days').fill('7'); await page.getByRole('button', { name: /保存 Project 設定|Save project settings/ }).click();
+  await expect.poll(async () => page.evaluate(async id => (await window.tokenInspector.privacy()).projects.find(p => p.id === id).policy.contentDays, project)).toBe(7);
+  expect((await page.evaluate(() => window.tokenInspector.contentSearch({ search: 'Historical' }))).items.length).toBe(0);
+  await appendFile(file, lines([message('NATIVE_SEARCH_MARKER password="NATIVE_SECRET"'), message('NATIVE_SEARCH_MARKER second')])); await page.evaluate(() => window.tokenInspector.refresh());
+  await page.getByRole('button', { name: /^(執行歷史|History)$/, exact: true }).click(); await page.getByRole('button', { name: /本機文字搜尋|Local text search/ }).click();
+  await expect(page.getByLabel('Approved local text search')).toBeVisible(); await page.getByLabel('Approved text search').fill('native_search_marker'); await page.getByRole('button', { name: /搜尋已保留文字|Search retained text/ }).click();
+  await expect(page.locator('.content-search-results article')).toHaveCount(2); await expect(page.locator('.content-search-results')).toContainText('[REDACTED]'); await expect(page.locator('.content-search-results')).not.toContainText('NATIVE_SECRET');
+  expect((await page.evaluate(() => window.tokenInspector.report({}, 'json'))).body).not.toContain('NATIVE_SEARCH_MARKER');
+  await page.screenshot({ path: '/tmp/agent-monitor-local-content-native.png', fullPage: true });
+  await page.getByRole('button', { name: /定位來源紀錄|Locate source event/ }).first().click(); await expect(page.locator('.timeline-target')).toBeVisible(); await expect(page.getByLabel('Approved local text search')).toHaveCount(0);
+  await page.getByRole('button', { name: /本機文字搜尋|Local text search/ }).click(); await page.getByLabel('Approved text search').fill('NATIVE_SEARCH_MARKER'); await page.getByRole('button', { name: /搜尋已保留文字|Search retained text/ }).click(); await expect(page.locator('.content-search-results article')).toHaveCount(2);
+  await page.evaluate(async id => { const p = (await window.tokenInspector.privacy()).projects.find(p => p.id === id).policy; await window.tokenInspector.setProjectPrivacy({ ...p, contentDays: 0 }); }, project);
+  await expect(page.locator('.content-search-results article')).toHaveCount(0); await expect(page.getByLabel('Approved local text search')).toContainText(/未有可搜尋片段|No searchable excerpts/);
+  expect((await page.evaluate(() => window.tokenInspector.summary())).usage.total.value).toBe('12');
+  if (errors.length) throw new Error(errors.join('; '));
+  console.log('PASS: native default-off settings, cancel/apply consent preview, future-only capture, redacted scoped text results, source-event navigation, live revocation purge, metadata-only report and unchanged 12-token ledger. All consent and dialogs are in an isolated fixture.');
+} finally { if (app) await app.close(); await rm(root, { recursive: true, force: true }); }

@@ -3,6 +3,7 @@ node_modules/
 dist/
 dist-electron/
 release/
+release-inspector/
 coverage/
 *.tsbuildinfo
 
@@ -18,10 +19,16 @@ coverage/
 .env
 .env.*
 !.env.example
+/electron-builder.local-signing.json
 *.pem
 *.key
 *.p12
 *.pfx
+*.pairing.json
+pairing.json
+credentials.json
+*.enc
+*.cred
 
 # Never commit real agent traces, session exports, or databases
 *.jsonl

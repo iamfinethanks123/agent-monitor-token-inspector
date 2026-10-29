@@ -1,0 +1,13 @@
+.timeline-investigations { padding: 18px; margin: 20px 0; border: 1px solid var(--border); background: var(--surface-2); border-radius: 12px; }
+.timeline-investigations header { display: flex; justify-content: space-between; gap: 20px; align-items: start; }
+.timeline-investigations h3 { margin: 0 0 8px; font-size: 15px; }
+.timeline-investigations p,.timeline-investigations small,.timeline-investigations details { color: var(--muted); font-size: 11px; line-height: 1.6; }
+.investigation-kind-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0; }
+.investigation-kind-tabs button { padding: 7px 12px; border: 1px solid var(--border); background: var(--surface); color: var(--muted); border-radius: 7px; cursor: pointer; font-size: 11px; }
+.investigation-kind-tabs button.is-active { border-color: var(--accent); color: var(--text); background: var(--accent-wash); }
+.investigation-chart { width: 100%; min-height: 200px; overflow: visible; }
+.investigation-chart text { fill: var(--muted); font-size: 11px; }.investigation-chart line { stroke: var(--border-strong); }
+.investigation-chart circle { cursor: pointer; fill: var(--accent); }.investigation-chart .marker-gap { fill: var(--warning); }.investigation-chart .marker-compaction { fill: var(--purple); }.investigation-chart .marker-retry { fill: var(--status-active); }
+.investigation-selection { padding: 12px; border: 1px solid var(--accent-border); background: var(--accent-wash); border-radius: 8px; display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; font-size: 12px; margin: 12px 0; }
+.investigation-unknown { display: grid; gap: 6px; margin: 12px 0; }.investigation-unknown button { border: 1px solid var(--border); border-radius: 6px; padding: 8px; background: var(--surface); color: var(--muted); text-align: left; cursor: pointer; font-size: 11px; }
+.timeline-source-lanes { display: flex; flex-wrap: wrap; gap: 8px; padding: 12px 0; }.timeline-source-lanes button { color: var(--muted); background: var(--surface-2); border: 1px solid var(--border); border-radius: 7px; padding: 8px 12px; cursor: pointer; font-size: 11px; }.timeline-source-lanes button.is-active { color: var(--text); border-color: var(--accent); }

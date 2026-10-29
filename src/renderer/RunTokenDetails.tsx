@@ -52,7 +52,7 @@ function costNote(cost: AgentCost) {
     : 'Known subtotal only; some model rates or cache token metadata are unavailable.';
 }
 
-export function RunTokenDetails({ agents }: { agents: Agent[] }) {
+export function RunTokenDetails({ agents, sourceLabel }: { agents: Agent[]; sourceLabel?: string }) {
   const ref = useRef<HTMLDetailsElement>(null);
   const [view, setView] = useState<'agent' | 'model'>('agent');
   const modelRows = useMemo(() => estimateModelCosts(agents), [agents]);
@@ -106,8 +106,8 @@ export function RunTokenDetails({ agents }: { agents: Agent[] }) {
     <details className="run-token-details" ref={ref} onKeyDown={event => {
       if (event.key === 'Escape' && ref.current?.open) { event.preventDefault(); event.stopPropagation(); close(); }
     }}>
-      <summary className="run-token-totals" aria-label={`Run token totals: ${exact(totals.input)} input, ${exact(totals.output)} output, ${totalCostLabel} API token estimate. Show per-agent breakdown`}>
-        <span className="run-token-totals__stat run-token-totals__stat--input" title={`${exact(totals.input)} input tokens`}>
+      <summary className="run-token-totals" aria-label={sourceLabel ?? `Run token totals: ${exact(totals.input)} input, ${exact(totals.output)} output, ${totalCostLabel} API token estimate. Show per-agent breakdown`}>
+        {!sourceLabel && <><span className="run-token-totals__stat run-token-totals__stat--input" title={`${exact(totals.input)} input tokens`}>
           <span className="run-token-totals__label">Input</span>
           <strong><RollingNumber value={totals.input} /></strong>
         </span>
@@ -119,12 +119,13 @@ export function RunTokenDetails({ agents }: { agents: Agent[] }) {
           <span className="run-token-totals__label">Est. cost</span>
           <strong><RollingText text={totalCost.knownUsd > 0 ? usdShort(totalCost.knownUsd) : totalCostLabel} /></strong>
         </span>
-        <span className="run-token-totals__details">Details<ChevronDown size={14} aria-hidden="true" /></span>
+        </>}<span className="run-token-totals__details">{sourceLabel ? 'Trace Details' : 'Details'}<ChevronDown size={14} aria-hidden="true" /></span>
       </summary>
       <section className="token-breakdown" aria-labelledby={titleId}>
         <header>
           <div>
-            <h2 id={titleId}>Token breakdown</h2>
+            <h2 id={titleId}>{sourceLabel ?? 'Token breakdown'}</h2>
+            {sourceLabel && <p>Source-reported counters; canonical dashboard membership and USD bounds are shown in Overview.</p>}
             <p>Main agent and {agents.length - 1} {agents.length === 2 ? 'subagent' : 'subagents'} · {agents.length} agents total</p>
           </div>
           <button type="button" className="token-breakdown__close" onClick={close}><X size={15} aria-hidden="true" />Close</button>

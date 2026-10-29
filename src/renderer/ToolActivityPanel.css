@@ -1,0 +1,7 @@
+.tool-activity-measures { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 1px; margin: 18px 0 24px; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+.tool-activity-measures article { display: grid; gap: 8px; padding: 18px; background: var(--surface); }
+.tool-activity-measures span,.tool-activity-measures small { color: var(--muted); font-size: 12px; }
+.tool-activity-measures strong { font-size: 25px; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.tool-activity-bar { height: 5px; margin: 9px 0; min-width: 140px; background: var(--border); border-radius: 5px; overflow: hidden; }
+.tool-activity-bar i { display: block; height: 100%; background: var(--accent); border-radius: inherit; }
+@media (max-width: 1050px) { .tool-activity-measures { grid-template-columns: repeat(2,minmax(0,1fr)); } }

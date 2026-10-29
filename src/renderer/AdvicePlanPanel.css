@@ -1,0 +1,1 @@
+.advice-plan{margin:16px 0;padding:14px 16px;background:var(--accent-wash);border:1px solid var(--accent-border);border-radius:9px}.advice-plan>summary{cursor:pointer;color:var(--text-strong);font-size:12px;font-weight:600}.advice-plan dl{margin-top:18px}.advice-plan-actions{display:flex;flex-wrap:wrap;align-items:center;gap:16px}.advice-plan p[role='alert']{color:var(--warning)}

@@ -1,0 +1,1254 @@
+{
+  "schemaVersion": "requirement-evidence/1",
+  "source": "docs/spec-reference.md",
+  "sourceSha256": "afe34991f72da8cea0896ca2a0ec2538444f3374fd04e282437301e038bb6480",
+  "reviewedAt": "2026-10-16",
+  "installedVersion": "0.1.29",
+  "completionProven": false,
+  "policy": "Requirement index, not a pass count or narrowed release. Current files and actual outcomes take precedence over old notes. All enabled milestone gates remain.",
+  "acceptanceScenarios": [
+    {
+      "id": "T01",
+      "scenario": "Supported old schema lacks response IDs",
+      "requiredResult": "Interval/aggregate mode; no invented request count",
+      "features": "F01-F02",
+      "reviewState": "evidence_indexed_not_full_scope_certified",
+      "evidencePointers": [
+        "tests/inspectorAccounting.test.ts",
+        "tests/inspectorScope.test.ts",
+        "tests/inspectorTotalExplanation.test.ts",
+        "tests/inspectorUsageSchema.test.ts",
+        "tests/inspectorSourceSample.test.ts"
+      ],
+      "scopeLimit": "Pointers locate evidence; inspect each assertion and actual result for this scenario. File existence is not completion.",
+      "complete": false
+    },
+    {
+      "id": "T02",
+      "scenario": "Rich response record plus matching thread total",
+      "requiredResult": "Count responses once; total is a control",
+      "features": "F02",
+      "reviewState": "evidence_indexed_not_full_scope_certified",
+      "evidencePointers": [
+        "tests/inspectorAccounting.test.ts",
+        "tests/inspectorScope.test.ts",
+        "tests/inspectorTotalExplanation.test.ts"
+      ],
+      "scopeLimit": "Pointers locate evidence; inspect each assertion and actual result for this scenario. File existence is not completion.",
+      "complete": false
+    },
+    {
+      "id": "T03",
+      "scenario": "Import same file repeatedly",
+      "requiredResult": "Canonical totals unchanged",
+      "features": "F02, F10",
+      "reviewState": "evidence_indexed_not_full_scope_certified",
+      "evidencePointers": [
+        "tests/inspectorAccounting.test.ts",
+        "tests/inspectorScope.test.ts",
+        "tests/inspectorTotalExplanation.test.ts",
+        "tests/inspectorTimeline.test.ts",
+        "tests/inspectorToolIdentity.test.ts"
+      ],
+      "scopeLimit": "Pointers locate evidence; inspect each assertion and actual result for this scenario. File existence is not completion.",
+      "complete": false
+    },
+    {
+      "id": "T04",
+      "scenario": "Two distinct responses have identical token counts",
+      "requiredResult": "Both counted",
+      "features": "F02",
+      "reviewState": "evidence_indexed_not_full_scope_certified",
+      "evidencePointers": [
+        "tests/inspectorAccounting.test.ts",
+        "tests/inspectorScope.test.ts",
+        "tests/inspectorTotalExplanation.test.ts"
+      ],
+      "scopeLimit": "Pointers locate evidence; inspect each assertion and actual result for this scenario. File existence is not completion.",
+      "complete": false
+    },
+    {
+      "id": "T05",
+      "scenario": "Duplicate final observation for same response",
+      "requiredResult": "One canonical entry; duplicate evidence retained",
+      "features": "F02",
+      "reviewState": "evidence_indexed_not_full_scope_certified",
+      "evidencePointers": [
+        "tests/inspectorAccounting.test.ts",
+        "tests/inspectorScope.test.ts",
+        "tests/inspectorTotalExplanation.test.ts"
+      ],
+      "scopeLimit": "Pointers locate evidence; inspect each assertion and actual result for this scenario. File existence is not completion.",
+      "complete": false
+    },
+    {
+      "id": "T06",
+      "scenario": "Same response ID has conflicting final counts",
+      "requiredResult": "Conflict visible; no silent overwrite",
+      "features": "F02, F18",
+      "reviewState": "evidence_indexed_not_full_scope_certified",
+      "evidencePointers": [
+        "tests/inspectorAccounting.test.ts",
+        "tests/inspectorScope.test.ts",
+        "tests/inspectorTotalExplanation.test.ts"
+      ],
+      "scopeLimit": "Pointers locate evidence; inspect each assertion and actual result for this scenario. File existence is not completion.",
+      "complete": false
+    },
+    {
+      "id": "T07",
+      "scenario": "Cached/reasoning fields absent",
+      "requiredResult": "Unknown, not zero",
+      "features": "F02, F15",
+      "reviewState": "evidence_indexed_not_full_scope_certified",
+      "evidencePointers": [
+        "tests/inspectorAccounting.test.ts",
+        "tests/inspectorScope.test.ts",
+        "tests/inspectorTotalExplanation.test.ts"
+      ],
+      "scopeLimit": "Pointers locate evidence; inspect each assertion and actual result for this scenario. File existence is not completion.",
+      "complete": false
+    },
+    {
+      "id": "T08",
+      "scenario": "Cached input exceeds input",
+      "requiredResult": "Invalid semantic record flagged",
+      "features": "F02, F18",
+      "reviewState": "evidence_indexed_not_full_scope_certified",
+      "evidencePointers": [
+        "tests/inspectorAccounting.test.ts",
+        "tests/inspectorScope.test.ts",
+        "tests/inspectorTotalExplanation.test.ts"
+      ],
+      "scopeLimit": "Pointers locate evidence; inspect each assertion and actual result for this scenario. File existence is not completion.",
+      "complete": false
+    },
+    {
+      "id": "T09",
+      "scenario": "Reasoning exceeds output",
+      "requiredResult": "Conflict flagged; no extra charge",
+      "features": "F02, F15",
+      "reviewState": "evidence_indexed_not_full_scope_certified",
+      "evidencePointers": [
+        "tests/inspectorAccounting.test.ts",
+        "tests/inspectorScope.test.ts",
+        "tests/inspectorTotalExplanation.test.ts"
+      ],
+      "scopeLimit": "Pointers locate evidence; inspect each assertion and actual result for this scenario. File existence is not completion.",
+      "complete": false
+    },
+    {
+      "id": "T10",
+      "scenario": "Cumulative 11k, 33k, 33k",
+      "requiredResult": "33k total; 22k increase; no 77k sum",
+      "features": "F02",
+      "reviewState": "evidence_indexed_not_full_scope_certified",
+      "evidencePointers": [
+        "tests/inspectorAccounting.test.ts",
+        "tests/inspectorScope.test.ts",
+        "tests/inspectorTotalExplanation.test.ts"
+      ],
+      "scopeLimit": "Pointers locate evidence; inspect each assertion and actual result for this scenario. File existence is not completion.",
+      "complete": false
+    },
+    {
+      "id": "T11",
+      "scenario": "First snapshot has no baseline",
+      "requiredResult": "Prior/untimed bucket, not import-minute spike",
+      "features": "F02, F10",
+      "reviewState": "evidence_indexed_not_full_scope_certified",
+      "evidencePointers": [
+        "tests/inspectorAccounting.test.ts",
+        "tests/inspectorScope.test.ts",
+        "tests/inspectorTotalExplanation.test.ts"
+      ],
+      "scopeLimit": "Pointers locate evidence; inspect each assertion and actual result for this scenario. File existence is not completion.",
+      "complete": false
+    },
+    {
+      "id": "T12",
+      "scenario": "Counter falls without reset proof",
+      "requiredResult": "Affected interval quarantined",
+      "features": "F02, F18",
+      "reviewState": "evidence_indexed_not_full_scope_certified",
+      "evidencePointers": [
+        "tests/inspectorAccounting.test.ts",
+        "tests/inspectorScope.test.ts",
+        "tests/inspectorTotalExplanation.test.ts"
+      ],
+      "scopeLimit": "Pointers locate evidence; inspect each assertion and actual result for this scenario. File existence is not completion.",
+      "complete": false
+    },
+    {
+      "id": "T13",
+      "scenario": "Confirmed correction or reset",
+      "requiredResult": "Explicit revision/epoch policy; auditable totals",
+      "features": "F02",
+      "reviewState": "source_contract_limited",
+      "evidencePointers": [
+        "tests/inspectorAccounting.test.ts",
+        "tests/inspectorScope.test.ts",
+        "tests/inspectorTotalExplanation.test.ts"
+      ],
+      "scopeLimit": "No compatible native confirmed-reset/correction field demonstrated; counter falls remain quarantined and source generations are not accounting resets.",
+      "complete": false
+    },
+    {
+      "id": "T14",
+      "scenario": "Interrupted request has no final usage",
+      "requiredResult": "Unknown cost, not free request",
+      "features": "F02",
+      "reviewState": "evidence_indexed_not_full_scope_certified",
+      "evidencePointers": [
+        "tests/inspectorAccounting.test.ts",
+        "tests/inspectorScope.test.ts",
+        "tests/inspectorTotalExplanation.test.ts"
+      ],
+      "scopeLimit": "Pointers locate evidence; inspect each assertion and actual result for this scenario. File existence is not completion.",
+      "complete": false
+    },
+    {
+      "id": "T15",
+      "scenario": "Same events forwarded from another machine",
+      "requiredResult": "Deduplicate only with valid origin evidence",
+      "features": "F02, F14",
+      "reviewState": "source_contract_limited",
+      "evidencePointers": [
+        "tests/inspectorCollectorSync.test.ts",
+        "tests/inspectorTransport.test.ts",
+        "tests/inspectorOffline.test.ts",
+        "docs/collector-windows.md"
+      ],
+      "scopeLimit": "Same-machine identity and authenticated transport replay have evidence; cross-observer native execution-origin proof is source-dependent.",
+      "complete": false
+    },
+    {
+      "id": "T16",
+      "scenario": "Fork contains copied historical events",
+      "requiredResult": "Do not count copied execution again",
+      "features": "F02, F08",
+      "reviewState": "source_contract_limited",
+      "evidencePointers": [
+        "tests/inspectorAccounting.test.ts",
+        "tests/inspectorScope.test.ts",
+        "tests/inspectorTotalExplanation.test.ts"
+      ],
+      "scopeLimit": "Copied-history remainder quarantine and tool replica collapse have fixtures; complete native fork-origin correlation remains source-dependent.",
+      "complete": false
+    },
+    {
+      "id": "T17",
+      "scenario": "Child actually executes inherited context",
+      "requiredResult": "Count new child response input",
+      "features": "F02, F09",
+      "reviewState": "evidence_indexed_not_full_scope_certified",
+      "evidencePointers": [
+        "tests/inspectorAccounting.test.ts",
+        "tests/inspectorScope.test.ts",
+        "tests/inspectorTotalExplanation.test.ts"
+      ],
+      "scopeLimit": "Child-response/ancestor union fixtures do not prove complete upstream request population.",
+      "complete": false
+    },
+    {
+      "id": "T18",
+      "scenario": "Partial JSONL line across writes",
+      "requiredResult": "Commit only completed record; no loss",
+      "features": "F01, F10",
+      "reviewState": "evidence_indexed_not_full_scope_certified",
+      "evidencePointers": [
+        "tests/inspectorAccounting.test.ts",
+        "tests/inspectorScope.test.ts",
+        "tests/inspectorTotalExplanation.test.ts",
+        "tests/inspectorTimeline.test.ts",
+        "tests/inspectorToolIdentity.test.ts"
+      ],
+      "scopeLimit": "Pointers locate evidence; inspect each assertion and actual result for this scenario. File existence is not completion.",
+      "complete": false
+    },
+    {
+      "id": "T19",
+      "scenario": "Rotation/truncation during collection",
+      "requiredResult": "New source generation; no false accounting reset",
+      "features": "F01-F02",
+      "reviewState": "evidence_indexed_not_full_scope_certified",
+      "evidencePointers": [
+        "tests/inspectorAccounting.test.ts",
+        "tests/inspectorScope.test.ts",
+        "tests/inspectorTotalExplanation.test.ts",
+        "tests/inspectorTimeline.test.ts",
+        "tests/inspectorToolIdentity.test.ts"
+      ],
+      "scopeLimit": "Pointers locate evidence; inspect each assertion and actual result for this scenario. File existence is not completion.",
+      "complete": false
+    },
+    {
+      "id": "T20",
+      "scenario": "Oversized/malformed record",
+      "requiredResult": "Bounded skip/gap; later valid records processed",
+      "features": "F10, F18",
+      "reviewState": "evidence_indexed_not_full_scope_certified",
+      "evidencePointers": [
+        "tests/inspectorAccounting.test.ts",
+        "tests/inspectorScope.test.ts",
+        "tests/inspectorTotalExplanation.test.ts",
+        "tests/inspectorUsageSchema.test.ts",
+        "tests/inspectorSourceSample.test.ts"
+      ],
+      "scopeLimit": "Pointers locate evidence; inspect each assertion and actual result for this scenario. File existence is not completion.",
+      "complete": false
+    },
+    {
+      "id": "T21",
+      "scenario": "10,000-event run and restart",
+      "requiredResult": "First/last retained events accessible; totals stable",
+      "features": "F10",
+      "reviewState": "evidence_indexed_not_full_scope_certified",
+      "evidencePointers": [
+        "tests/inspectorAccounting.test.ts",
+        "tests/inspectorScope.test.ts",
+        "tests/inspectorTotalExplanation.test.ts",
+        "tests/inspectorTimeline.test.ts",
+        "tests/inspectorToolIdentity.test.ts"
+      ],
+      "scopeLimit": "10,000-event navigation/restart fixtures do not certify renderer-memory or all accessibility targets.",
+      "complete": false
+    },
+    {
+      "id": "T22",
+      "scenario": "One file printed through a tool",
+      "requiredResult": "One primary origin category, not two",
+      "features": "F03-F04",
+      "reviewState": "evidence_indexed_not_full_scope_certified",
+      "evidencePointers": [
+        "tests/inspectorContextAttribution.test.ts",
+        "tests/inspectorManifests.test.ts",
+        "tests/inspectorToolOutputParts.test.ts"
+      ],
+      "scopeLimit": "Pointers locate evidence; inspect each assertion and actual result for this scenario. File existence is not completion.",
+      "complete": false
+    },
+    {
+      "id": "T23",
+      "scenario": "1 MiB original output reduced to 2 KiB model payload",
+      "requiredResult": "Estimate appropriate captured scope only",
+      "features": "F03-F04",
+      "reviewState": "evidence_indexed_not_full_scope_certified",
+      "evidencePointers": [
+        "tests/inspectorContextAttribution.test.ts",
+        "tests/inspectorManifests.test.ts",
+        "tests/inspectorToolOutputParts.test.ts"
+      ],
+      "scopeLimit": "Pointers locate evidence; inspect each assertion and actual result for this scenario. File existence is not completion.",
+      "complete": false
+    },
+    {
+      "id": "T24",
+      "scenario": "Visible reconstruction exceeds official input",
+      "requiredResult": "Discrepancy shown; no negative unknown bucket",
+      "features": "F03",
+      "reviewState": "evidence_indexed_not_full_scope_certified",
+      "evidencePointers": [
+        "tests/inspectorContextAttribution.test.ts",
+        "tests/inspectorManifests.test.ts",
+        "tests/inspectorToolOutputParts.test.ts"
+      ],
+      "scopeLimit": "Pointers locate evidence; inspect each assertion and actual result for this scenario. File existence is not completion.",
+      "complete": false
+    },
+    {
+      "id": "T25",
+      "scenario": "Repeated path but changed/unknown content",
+      "requiredResult": "No identical-content claim",
+      "features": "F05",
+      "reviewState": "evidence_indexed_not_full_scope_certified",
+      "evidencePointers": [
+        "tests/inspectorDiagnostics.test.ts",
+        "tests/inspectorAgentComparison.test.ts",
+        "tests/fixtures/detector-corpus.json"
+      ],
+      "scopeLimit": "Pointers locate evidence; inspect each assertion and actual result for this scenario. File existence is not completion.",
+      "complete": false
+    },
+    {
+      "id": "T26",
+      "scenario": "Identical captured file range repeated",
+      "requiredResult": "Evidence-backed candidate, savings unknown",
+      "features": "F05",
+      "reviewState": "evidence_indexed_not_full_scope_certified",
+      "evidencePointers": [
+        "tests/inspectorDiagnostics.test.ts",
+        "tests/inspectorAgentComparison.test.ts",
+        "tests/fixtures/detector-corpus.json"
+      ],
+      "scopeLimit": "Pointers locate evidence; inspect each assertion and actual result for this scenario. File existence is not completion.",
+      "complete": false
+    },
+    {
+      "id": "T27",
+      "scenario": "Required post-edit/independent verification",
+      "requiredResult": "Suppression or lower-confidence finding",
+      "features": "F05, F08",
+      "reviewState": "evidence_indexed_not_full_scope_certified",
+      "evidencePointers": [
+        "tests/inspectorDiagnostics.test.ts",
+        "tests/inspectorAgentComparison.test.ts",
+        "tests/fixtures/detector-corpus.json"
+      ],
+      "scopeLimit": "Pointers locate evidence; inspect each assertion and actual result for this scenario. File existence is not completion.",
+      "complete": false
+    },
+    {
+      "id": "T28",
+      "scenario": "Same failed test with no observed progress",
+      "requiredResult": "Candidate with alternatives and evidence",
+      "features": "F06",
+      "reviewState": "evidence_indexed_not_full_scope_certified",
+      "evidencePointers": [
+        "tests/inspectorRetryProgress.test.ts",
+        "src/diagnostics/retry-progress.ts"
+      ],
+      "scopeLimit": "Pointers locate evidence; inspect each assertion and actual result for this scenario. File existence is not completion.",
+      "complete": false
+    },
+    {
+      "id": "T29",
+      "scenario": "Test error changes after relevant fix",
+      "requiredResult": "Separate productive debugging from stagnation",
+      "features": "F06",
+      "reviewState": "evidence_indexed_not_full_scope_certified",
+      "evidencePointers": [
+        "tests/inspectorRetryProgress.test.ts",
+        "src/diagnostics/retry-progress.ts"
+      ],
+      "scopeLimit": "Pointers locate evidence; inspect each assertion and actual result for this scenario. File existence is not completion.",
+      "complete": false
+    },
+    {
+      "id": "T30",
+      "scenario": "Poll a long-running process repeatedly",
+      "requiredResult": "Not counted as repeated test execution",
+      "features": "F06",
+      "reviewState": "evidence_indexed_not_full_scope_certified",
+      "evidencePointers": [
+        "tests/inspectorRetryProgress.test.ts",
+        "src/diagnostics/retry-progress.ts"
+      ],
+      "scopeLimit": "Pointers locate evidence; inspect each assertion and actual result for this scenario. File existence is not completion.",
+      "complete": false
+    },
+    {
+      "id": "T31",
+      "scenario": "Explicit compaction without separate usage",
+      "requiredResult": "Count event; overhead unknown",
+      "features": "F07",
+      "reviewState": "evidence_indexed_not_full_scope_certified",
+      "evidencePointers": [
+        "tests/inspectorCompactions.test.ts",
+        "src/diagnostics/compactions.ts"
+      ],
+      "scopeLimit": "Pointers locate evidence; inspect each assertion and actual result for this scenario. File existence is not completion.",
+      "complete": false
+    },
+    {
+      "id": "T32",
+      "scenario": "Input drop without compaction event",
+      "requiredResult": "No confirmed compaction claim",
+      "features": "F07",
+      "reviewState": "evidence_indexed_not_full_scope_certified",
+      "evidencePointers": [
+        "tests/inspectorCompactions.test.ts",
+        "src/diagnostics/compactions.ts"
+      ],
+      "scopeLimit": "Pointers locate evidence; inspect each assertion and actual result for this scenario. File existence is not completion.",
+      "complete": false
+    },
+    {
+      "id": "T33",
+      "scenario": "Two intentionally independent reviewers",
+      "requiredResult": "No automatic inefficiency penalty",
+      "features": "F08-F09",
+      "reviewState": "evidence_indexed_not_full_scope_certified",
+      "evidencePointers": [
+        "tests/inspectorAgentComparison.test.ts",
+        "tests/inspectorExperiments.test.ts",
+        "tests/inspectorBenchmarkExecution.test.ts"
+      ],
+      "scopeLimit": "Pointers locate evidence; inspect each assertion and actual result for this scenario. File existence is not completion.",
+      "complete": false
+    },
+    {
+      "id": "T34",
+      "scenario": "Agent says done; acceptance test fails",
+      "requiredResult": "Verified failure/unverified completion as appropriate",
+      "features": "F09",
+      "reviewState": "evidence_indexed_not_full_scope_certified",
+      "evidencePointers": [
+        "tests/inspectorAgentComparison.test.ts",
+        "tests/inspectorExperiments.test.ts",
+        "tests/inspectorBenchmarkExecution.test.ts"
+      ],
+      "scopeLimit": "Pointers locate evidence; inspect each assertion and actual result for this scenario. File existence is not completion.",
+      "complete": false
+    },
+    {
+      "id": "T35",
+      "scenario": "Multiple findings reference same responses",
+      "requiredResult": "Associated aggregate uses union",
+      "features": "F11-F12",
+      "reviewState": "evidence_indexed_not_full_scope_certified",
+      "evidencePointers": [
+        "tests/inspectorAlerts.test.ts",
+        "tests/inspectorDiagnosticsScope.test.ts",
+        "tests/inspectorDiagnostics.test.ts"
+      ],
+      "scopeLimit": "Pointers locate evidence; inspect each assertion and actual result for this scenario. File existence is not completion.",
+      "complete": false
+    },
+    {
+      "id": "T36",
+      "scenario": "Historical import triggers many matches",
+      "requiredResult": "Findings created; no live-alert flood",
+      "features": "F11",
+      "reviewState": "evidence_indexed_not_full_scope_certified",
+      "evidencePointers": [
+        "tests/inspectorAlerts.test.ts",
+        "tests/inspectorDiagnosticsScope.test.ts",
+        "tests/inspectorDiagnostics.test.ts"
+      ],
+      "scopeLimit": "Pointers locate evidence; inspect each assertion and actual result for this scenario. File existence is not completion.",
+      "complete": false
+    },
+    {
+      "id": "T37",
+      "scenario": "Mixed models, unknown route, missing tier",
+      "requiredResult": "Partial/unpriced states; no last-model pricing",
+      "features": "F15",
+      "reviewState": "evidence_indexed_not_full_scope_certified",
+      "evidencePointers": [
+        "tests/inspectorAutomaticUsd.test.ts",
+        "tests/inspectorPrices.test.ts",
+        "tests/inspectorTimeCharts.test.ts"
+      ],
+      "scopeLimit": "Pointers locate evidence; inspect each assertion and actual result for this scenario. File existence is not completion.",
+      "complete": false
+    },
+    {
+      "id": "T38",
+      "scenario": "Malicious HTML, CSV formula, prompt injection",
+      "requiredResult": "Escaped/export-safe; no execution or exfiltration",
+      "features": "F12, F16-F17",
+      "reviewState": "evidence_indexed_not_full_scope_certified",
+      "evidencePointers": [
+        "tests/inspectorExperiments.test.ts",
+        "tests/inspectorProjectPrivacy.test.ts",
+        "src/reporting/report.ts"
+      ],
+      "scopeLimit": "Pointers locate evidence; inspect each assertion and actual result for this scenario. File existence is not completion.",
+      "complete": false
+    },
+    {
+      "id": "T39",
+      "scenario": "External advisor disabled",
+      "requiredResult": "Core diagnostics still work",
+      "features": "F12",
+      "reviewState": "evidence_indexed_not_full_scope_certified",
+      "evidencePointers": [
+        "tests/inspectorAgentComparison.test.ts",
+        "tests/inspectorExperiments.test.ts",
+        "tests/inspectorBenchmarkExecution.test.ts"
+      ],
+      "scopeLimit": "Pointers locate evidence; inspect each assertion and actual result for this scenario. File existence is not completion.",
+      "complete": false
+    },
+    {
+      "id": "T40",
+      "scenario": "Benchmark variant cheaper but fails",
+      "requiredResult": "Not recommended as quality-preserving improvement",
+      "features": "F13",
+      "reviewState": "evidence_indexed_not_full_scope_certified",
+      "evidencePointers": [
+        "tests/inspectorAgentComparison.test.ts",
+        "tests/inspectorExperiments.test.ts",
+        "tests/inspectorBenchmarkExecution.test.ts"
+      ],
+      "scopeLimit": "Pointers locate evidence; inspect each assertion and actual result for this scenario. File existence is not completion.",
+      "complete": false
+    },
+    {
+      "id": "T41",
+      "scenario": "24-hour disconnect then bounded replay",
+      "requiredResult": "Durable progress; no duplicates; freshness correct",
+      "features": "F14",
+      "reviewState": "evidence_indexed_not_full_scope_certified",
+      "evidencePointers": [
+        "tests/inspectorCollectorSync.test.ts",
+        "tests/inspectorTransport.test.ts",
+        "tests/inspectorOffline.test.ts",
+        "docs/collector-windows.md"
+      ],
+      "scopeLimit": "24-hour-aged queue plus real refused connection/restart/ACK-loss is fault injection, not a physical24-hour outage claim.",
+      "complete": false
+    },
+    {
+      "id": "T42",
+      "scenario": "Revoked device / forged workspace ID",
+      "requiredResult": "Ingestion and detail access denied",
+      "features": "F14, F17",
+      "reviewState": "evidence_indexed_not_full_scope_certified",
+      "evidencePointers": [
+        "tests/inspectorCollectorSync.test.ts",
+        "tests/inspectorTransport.test.ts",
+        "tests/inspectorOffline.test.ts",
+        "docs/collector-windows.md"
+      ],
+      "scopeLimit": "Pointers locate evidence; inspect each assertion and actual result for this scenario. File existence is not completion.",
+      "complete": false
+    },
+    {
+      "id": "T43",
+      "scenario": "Secret markers in local trace",
+      "requiredResult": "Not present in metadata sync or AI payload",
+      "features": "F14, F17",
+      "reviewState": "evidence_indexed_not_full_scope_certified",
+      "evidencePointers": [
+        "tests/inspectorCollectorSync.test.ts",
+        "tests/inspectorTransport.test.ts",
+        "tests/inspectorOffline.test.ts",
+        "docs/collector-windows.md"
+      ],
+      "scopeLimit": "Pointers locate evidence; inspect each assertion and actual result for this scenario. File existence is not completion.",
+      "complete": false
+    },
+    {
+      "id": "T44",
+      "scenario": "User deletes monitor history; source still exists",
+      "requiredResult": "Tombstone/exclusion works; source unchanged",
+      "features": "F17",
+      "reviewState": "evidence_indexed_not_full_scope_certified",
+      "evidencePointers": [
+        "tests/inspectorPrivacy.test.ts",
+        "tests/inspectorProjectControls.test.ts",
+        "tests/inspectorLocalContent.test.ts"
+      ],
+      "scopeLimit": "Pointers locate evidence; inspect each assertion and actual result for this scenario. File existence is not completion.",
+      "complete": false
+    },
+    {
+      "id": "T45",
+      "scenario": "Unsupported schema upgrade",
+      "requiredResult": "Capability downgrade and visible warning",
+      "features": "F01, F18",
+      "reviewState": "evidence_indexed_not_full_scope_certified",
+      "evidencePointers": [
+        "tests/inspectorAccounting.test.ts",
+        "tests/inspectorScope.test.ts",
+        "tests/inspectorTotalExplanation.test.ts",
+        "tests/inspectorUsageSchema.test.ts",
+        "tests/inspectorSourceSample.test.ts"
+      ],
+      "scopeLimit": "Pointers locate evidence; inspect each assertion and actual result for this scenario. File existence is not completion.",
+      "complete": false
+    },
+    {
+      "id": "T46",
+      "scenario": "Unsupported account method/auth",
+      "requiredResult": "Graceful unavailable state",
+      "features": "F19",
+      "reviewState": "conditional",
+      "evidencePointers": [
+        "tests/inspectorDiagnostics.test.ts",
+        "src/storage/quotas.ts",
+        "tests/accountUsage.test.ts",
+        "scripts/smoke-account-usage.mjs",
+        "docs/account-usage.md"
+      ],
+      "scopeLimit": "0.1.21 adds explicit account/rateLimits/read beside account/usage/read through the installed signed-in Codex CLI. Unsupported account modes remain unavailable. Passive recorded windows stay separate; no credential-store extraction or account writes. Entry-level identity and full historical reconciliation remain unproven.",
+      "complete": false
+    },
+    {
+      "id": "T47",
+      "scenario": "Context manifest linked to known response",
+      "requiredResult": "Inclusion supported only for client-visible scope",
+      "features": "F20",
+      "reviewState": "conditional",
+      "evidencePointers": [
+        "tests/inspectorManifests.test.ts",
+        "src/collector/owned-client.ts"
+      ],
+      "scopeLimit": "Owned-client opt-in metadata fixture only; no Desktop private-input interception.",
+      "complete": false
+    },
+    {
+      "id": "T48",
+      "scenario": "Existing non-Codex upstream fixtures",
+      "requiredResult": "No regression of preserved behavior",
+      "features": "F01-F02, F10",
+      "reviewState": "evidence_indexed_not_full_scope_certified",
+      "evidencePointers": [
+        "docs/baseline-audit.md",
+        "docs/agent-monitor-integration.md",
+        "scripts/smoke.mjs"
+      ],
+      "scopeLimit": "Pinned baseline and full native upstream fixture outcome exist; every provider does not have real user sessions on this Mac.",
+      "complete": false
+    },
+    {
+      "id": "T49",
+      "scenario": "Token totals exceed JS safe-integer range",
+      "requiredResult": "Exact string/bigint behavior; overflow rejected",
+      "features": "F02, F16",
+      "reviewState": "evidence_indexed_not_full_scope_certified",
+      "evidencePointers": [
+        "tests/inspectorAccounting.test.ts",
+        "tests/inspectorExperiments.test.ts"
+      ],
+      "scopeLimit": "Pointers locate evidence; inspect each assertion and actual result for this scenario. File existence is not completion.",
+      "complete": false
+    },
+    {
+      "id": "T50",
+      "scenario": "SQLite crash, storage-full, or interrupted migration",
+      "requiredResult": "Previous data preserved; visible degraded state",
+      "features": "F10, F18",
+      "reviewState": "evidence_indexed_not_full_scope_certified",
+      "evidencePointers": [
+        "tests/inspectorStorage.test.ts",
+        "tests/inspectorStoragePause.test.ts",
+        "docs/storage-recovery.md"
+      ],
+      "scopeLimit": "Incremental FULL/READONLY pause, cursor preservation/recovery and migration fixtures exist; all crash/storage-full/interrupted migration cases are not yet proven.",
+      "complete": false
+    }
+  ],
+  "currentAccountingAudit": {
+    "log": "/tmp/agent-monitor-audit-accounting-verified.log",
+    "cases": 14,
+    "passed": 14,
+    "failed": 0,
+    "change": "Readonly failure now explicitly rejects with SQLite8; unchanged cursor/12 and recovery35 assertions remain."
+  },
+  "operationalTargets": {
+    "reference": "4logicalCPU/16GiB/localSSD",
+    "measurementUnit": "agent-monitor-scale-finalize-20261015.service",
+    "measurementState": "finalization_terminal_success_reference_latency_unmet",
+    "hardware": "LinuxARM64/4logicalCPU/about24GiB/Node24.21",
+    "limits": "CPUQuota100%/MemoryMax256MiB/RuntimeMax10min for finalization; original import segments30min",
+    "complete": false,
+    "remaining": [
+      "reference timeline/summary p95",
+      "100events_per_second visibility",
+      "keyboard/focus/screen-reader/full-width validation",
+      "continuous-import process peakRSS; terminated segments lack final OS sampling"
+    ],
+    "firstSegment": {
+      "result": "timeout",
+      "mainPid": 0,
+      "committedRecords": 643424,
+      "cursorBytes": 737899247
+    },
+    "currentRecords": 1000000,
+    "rendererScenario": {
+      "records": 10001,
+      "messages": 10000,
+      "observedPeakWorkingSetBytes": 186023936,
+      "maxRenderedRows": 10,
+      "evidence": "/tmp/agent-monitor-timeline-renderer-measurement.json",
+      "scope": "documented isolated selected-run scenario",
+      "completeForScenario": true,
+      "exhaustiveMemoryOrA11y": false
+    },
+    "canonicalTokens": "11988",
+    "parseGaps": 110,
+    "singleTimeline200Ms": {
+      "before": 27297.544476,
+      "after": 6650.05304,
+      "referenceHardwareMatches": false
+    },
+    "secondSegment": {
+      "result": "timeout",
+      "mainPid": 0,
+      "committedRecords": 1000000,
+      "cursorBytes": 1148805203,
+      "processPeakRssBytes": 135233536
+    },
+    "measurementResult": "/tmp/agent-monitor-scale-evidence-20261015/result.json",
+    "queryPeakRssBytes": 88784896,
+    "runSummary": {
+      "samples": 20,
+      "p50Ms": 110.6799029999529,
+      "p95Ms": 117.9349350000266,
+      "maxMs": 6377.728566000005
+    },
+    "idle": {
+      "durationMs": 10056.874408999982,
+      "scans": 5,
+      "cpuPercentOneCore": 0.09279224956462333
+    },
+    "restartReplayPreserved": true,
+    "referenceHardwareMatches": false,
+    "timelineCapturedPaging": {
+      "evidence": "/tmp/agent-monitor-scale-evidence-20261015/timeline-pages-result.json",
+      "scope": "one cold scope plus20 consecutive200-row pages on same1M synthetic database",
+      "sourceSha256": "8097d109d375b086cd5ae68f84dd89010c390ffb277aa0592380021cd95d01c4",
+      "bundleSha256": "0fd79944d5b29883aec81bc9a82f380b532cfbce3a01fe01bb46f748778f209a",
+      "coldFirstPageMs": 3723.230131,
+      "p50Ms": 15.334511,
+      "p95Ms": 18.354301,
+      "maxMs": 20.065638,
+      "peakProcessRssBytes": 67325952,
+      "mainDatabaseReadOnly": true,
+      "referenceHardwareMatches": false,
+      "completeForPagingScenario": true,
+      "coldFilterCertification": false
+    },
+    "uncachedTimeline200": {
+      "version": "0.1.7",
+      "samples": 20,
+      "p50Ms": 6894.687319000019,
+      "p95Ms": 14840.524695,
+      "maxMs": 22051.571943999996
+    },
+    "localEventInterface": {
+      "scope": "macOS12logical/16GiB; realworker;500syntheticevents/100persecond; automatic notifications toTimeline queries",
+      "p50Ms": 756.550958,
+      "p95Ms": 1211.627792,
+      "maxMs": 1315.037792,
+      "eventsObserved": 500,
+      "notifications": 5,
+      "quietMs": 3100,
+      "evidence": "/tmp/agent-monitor-live-visibility-green-20261015.log",
+      "referenceHardwareMatches": false,
+      "nativeAllEventsPaintProven": false
+    },
+    "slowLiveReader": {
+      "evidence": "/tmp/agent-monitor-live-reader-green-20261015.log",
+      "noticesEveryMs": 50,
+      "diagnosticsDelayMs": 800,
+      "previousConcurrent": 16,
+      "currentConcurrent": 1,
+      "scope": "isolated actualrenderer; delayedIPC stub; canonical12 maintained"
+    }
+  },
+  "features": [
+    {
+      "id": "F01",
+      "name": "Source discovery and capability inspection",
+      "sourceRequirements": "**Purpose:** Establish what can actually be measured before displaying conclusions.\n\n**Requirements**\n\n- Discover authorized local roots and list sessions without importing every body immediately. Let the user include/exclude specific roots, projects, and dates.\n- Support the documented Codex default locations through a versioned adapter. Additional/archived locations require explicit configuration and a tested format; do not assume they exist.\n- Distinguish a source log on Windows from a Mac UI that merely controls Windows. Collect where compatible records are actually written.\n- Display a capability matrix: usage snapshots, per-response identity, cache fields, reasoning count, tool pairing, parent-agent links, compaction events, model identity, source timestamps, and context manifests.\n- Track harness version, schema fingerprint, adapter version, host OS/architecture, and inspection time. “Version unknown” is a valid state.\n- Provide an explicit “Inspect a sample locally” action that reports fields and coverage without uploading content.\n- Reuse existing run selection and provider discovery. Do not regress other supported harnesses while improving Codex.\n\n**UI:** Source Setup, with `ready`, `partial`, `unsupported`, `permission_denied`, and `offline` states. A usable source with limited fields remains usable.\n\n**Acceptance:** A compatible legacy sample is admitted with partial capabilities; a richer sample enables additional detail; an unknown schema is visibly unsupported rather than converted into zero usage. Denied folders do not crash the application or trigger requests for administrator access.",
+      "acceptance": "A compatible legacy sample is admitted with partial capabilities; a richer sample enables additional detail; an unknown schema is visibly unsupported rather than converted into zero usage. Denied folders do not crash the application or trigger requests for administrator access.",
+      "complete": false,
+      "reviewState": "current_implementation_and_scope_must_be_verified",
+      "evidencePointers": [
+        "docs/source-availability.md",
+        "src/collector/source-availability.ts",
+        "src/renderer/SourceAvailabilityPanel.tsx",
+        "tests/sourceAvailability.test.ts",
+        "scripts/smoke-source-availability.mjs",
+        "docs/codex-home-sources.md",
+        "tests/codexHomeRoots.test.ts",
+        "scripts/smoke-codex-home-collector.mjs"
+      ]
+    },
+    {
+      "id": "F02",
+      "name": "Canonical token ledger and reconciliation",
+      "sourceRequirements": "**Purpose:** Make every displayed total explainable and reproducible.\n\n**Requirements**\n\n- Store immutable raw observations separately from the selected canonical accounting entries.\n- Prefer identified per-response usage when the adapter proves the scope. Otherwise use compatible cumulative deltas as **intervals**, not invented requests.\n- Store input, cached input, optional cache write, output, reasoning, and total with independent presence/provenance flags.\n- Capture available thread, session, root-turn, turn, response, model/provider, timestamp, and source-position identifiers.\n- Keep cumulative turn/thread counters as control totals; never add them to their underlying responses.\n- Deduplicate replay and mirrored files without suppressing two different responses that happen to use the same number of tokens.\n- Resolve or expose parent/child aggregate scope. Support exclusive agent, inclusive subtree, run, project, model, machine, and date views through set-based identity rules.\n- Support unknown usage on cancelled or failed attempts. A missing completion is not free execution.\n- Show reconciliation results: matched, partial, conflicting, unallocated interval, or unknown population.\n- Record accounting-policy and adapter versions so a later reparse can explain why totals changed.\n\n**UI:** A ledger table with a request/interval badge, input/output components, model attribution confidence, source links, and reconciliation status. An “Explain this total” drawer lists all included entries and excluded duplicate/aggregate observations.\n\n**Acceptance:** Reimporting a dataset ten times changes no canonical total. Adding exact response records to an already imported aggregate refines the view without adding the same usage again. Unsupported request IDs degrade to interval mode.",
+      "acceptance": "Reimporting a dataset ten times changes no canonical total. Adding exact response records to an already imported aggregate refines the view without adding the same usage again. Unsupported request IDs degrade to interval mode.",
+      "complete": false,
+      "reviewState": "current_implementation_and_scope_must_be_verified"
+    },
+    {
+      "id": "F03",
+      "name": "Context attribution with uncertainty",
+      "sourceRequirements": "**Purpose:** Explain which visible content may contribute to model input without pretending to see unavailable context.\n\n**Requirements**\n\n- Model each content occurrence using three independent facets:\n  - **Origin:** user instruction, project file, external document/search, command output, agent-generated message, subagent handoff, skill/plugin definition, other, or unknown.\n  - **Transport:** user message, tool result, injected context, summary, or other.\n  - **Age/state:** newly introduced, retained, summarized, truncated, removed, or unknown.\n- Use a mutually exclusive primary-origin partition for a breakdown. A file printed by a terminal is not counted again as both a project file and tool output in the same total.\n- Keep original text length, observed tool payload, client-side transformed payload, and instrumented request inclusion distinct.\n- Tokenize only accessible text with a known or explicitly approximate tokenizer. Record tokenizer identity/version and whether serialization overhead is included.\n- Keep text, image/audio, tool-schema overhead, and unknown server additions separate. Do not estimate multimodal billing from character count.\n- Track context epochs and content lineage through known summarization/truncation events.\n- Show repeated exposure only when request inclusion is supported. Otherwise show an explicitly labeled scenario with assumptions, or no estimate.\n- Never allocate aggregate cache reads proportionally to individual files and label the result exact.\n\n**Reconciliation:** Compare provider input with the visible reconstruction. Do not rescale estimates merely to make a chart sum to the official count. If the reconstruction exceeds the provider total, display a reconstruction discrepancy. A positive residual from an estimated reconstruction is not proof that the remainder is a system prompt.\n\n**UI:** “Provider usage” and “Visible context estimate” are separate panels. Category charts use an uncertainty legend. Users can open the content occurrences behind a category.\n\n**Acceptance:** One file-content tool result occupies one primary bucket. Missing context is visible. An overcounted reconstruction produces a warning, not a negative “unknown” category. No hidden prompt or reasoning text is fabricated.",
+      "acceptance": "One file-content tool result occupies one primary bucket. Missing context is visible. An overcounted reconstruction produces a warning, not a negative “unknown” category. No hidden prompt or reasoning text is fabricated.",
+      "complete": false,
+      "reviewState": "current_implementation_and_scope_must_be_verified"
+    },
+    {
+      "id": "F04",
+      "name": "Tool, file, skill, plugin, and instruction impact",
+      "sourceRequirements": "**Purpose:** Identify high-volume operations and the context they introduce.\n\n**Requirements**\n\n- Pair tool calls and results by provider namespace plus call ID. Keep unpaired/ambiguous events visible.\n- Capture tool name, argument metadata, duration where observed, exit/status evidence, output bytes, truncation state, and content-origin references.\n- Track terminal execution, file reads/searches, patches, web/retrieval actions, subagent handoffs, and plugin/MCP calls where the source provides them.\n- Separate **argument/output tokens generated by the model**, **tool payload token estimates**, and **subsequent request-input exposure**. These are different quantities.\n- Aggregate repeated output by tool family and stable content identity.\n- Identify visible `AGENTS.md`, skill instructions, plugin schemas, or tool definitions only when there is evidence of their presence. Installed/enabled does not mean included in every request.\n- Record the source of a plugin or skill label: explicit metadata, parsed path, user annotation, or heuristic.\n- Offer bounded-output suggestions such as targeted searches, relevant line ranges, or failure summaries; preserve access to complete diagnostic artifacts.\n\n**UI:** Tool/Content Explorer showing invocation count, bytes emitted, estimated payload tokens, observed subsequent usage intervals, repeated-content findings, and applicable caveats.\n\n**Acceptance:** A 1 MiB original log truncated to a 2 KiB model-visible result does not receive a 1 MiB input estimate. A tool call before a 100,000-token request is not assigned all 100,000 tokens. Cached exposure remains unknown at file level without supporting spans.",
+      "acceptance": "A 1 MiB original log truncated to a 2 KiB model-visible result does not receive a 1 MiB input estimate. A tool call before a 100,000-token request is not assigned all 100,000 tokens. Cached exposure remains unknown at file level without supporting spans.",
+      "complete": false,
+      "reviewState": "current_implementation_and_scope_must_be_verified"
+    },
+    {
+      "id": "F05",
+      "name": "Repeated-read and duplicate-content detector",
+      "sourceRequirements": "**Purpose:** Surface repeated content that may be avoidable, without punishing necessary verification.\n\n**Detection inputs:** Tool-pair records, observed output fingerprints, file/worktree identity, captured byte/line ranges, timestamps, revisions where observed, and compaction boundaries.\n\n**Rules**\n\n- Begin with deterministic exact fingerprints for the actual captured text or byte range. Add near-duplicate detection only after exact matching is tested.\n- Distinguish `same captured content`, `overlapping captured range`, and `same path but content/version unknown`.\n- Do not infer that a historical file was unchanged by hashing its current contents. A missing edit event does not prove no external edit occurred.\n- Count duplicate emitted content separately from repeated retention of one original result in later requests.\n- Suppress or downgrade findings after a relevant change, explicit verification instruction, source update, or compaction-related reread.\n- Treat truncated comparisons as partial evidence.\n- Store the reason for each finding and its suppressions.\n\n**Default candidate rule:** At least three identical captured reads in one context epoch, with at least 2,000 estimated duplicate payload tokens. These are initial product defaults, not research-derived optimal thresholds.\n\n**Finding example:** “Five reads returned the same captured range of `strategy.py`. Estimated repeated tool payload: 18,000 tokens. Incremental model input and avoidable cost are unknown.”\n\n**Actions:** Open matching reads, compare versions/ranges, mark intentional, suppress for this task, or copy a targeted-read suggestion. No automatic filesystem or prompt mutation.\n\n**Acceptance:** Same path with changed content does not trigger an identical-content claim. Two requests with identical usage numbers remain separate. Required post-edit verification is not labeled confirmed waste.",
+      "acceptance": "Same path with changed content does not trigger an identical-content claim. Two requests with identical usage numbers remain separate. Required post-edit verification is not labeled confirmed waste.",
+      "complete": false,
+      "reviewState": "current_implementation_and_scope_must_be_verified"
+    },
+    {
+      "id": "F06",
+      "name": "Retry-loop and repeated-failure diagnosis",
+      "sourceRequirements": "**Purpose:** Distinguish productive debugging from repeated failure with little visible progress.\n\n**Requirements**\n\n- Normalize command/test identity and error signatures while preserving meaningful assertion values and relevant stack locations.\n- Group attempts by task, worktree, target, and context; do not merge unrelated tests because they share “failed.”\n- Track intervening relevant diffs, configuration/environment evidence, changes in failing cases, and explicit progress markers.\n- Differentiate compile/test failures, dependency/environment failures, permission denials, network/API retries, and long-running-process polling.\n- Recognize that `poll`/`wait` calls for the same running process are not new executions.\n- Separate an agent retry from provider/transport retransmission. Usage on an interrupted transport may be unknown.\n- Report the union of associated observed usage intervals, not a fabricated causal “retry cost.”\n\n**Default candidate rule:** Three comparable failures within ten minutes with the same normalized signature and no observed relevant progress. Unknown code/environment state lowers confidence; it does not prove lack of progress.\n\n**Severity:** Informational for recurrence; warning when evidence supports stagnation; never “infinite loop” from a finite sample.\n\n**Recommendation:** Check the root cause, environment, or task assumptions; narrow the next diagnostic step. Do not automatically reduce test coverage, increase permissions, or retry indefinitely.\n\n**Acceptance:** A changing failing assertion with relevant edits is separated from an unchanged dependency error. Explicitly requested retry/backoff tests can be suppressed. Alerts link to each failure and relevant intervening evidence.",
+      "acceptance": "A changing failing assertion with relevant edits is separated from an unchanged dependency error. Explicitly requested retry/backoff tests can be suppressed. Alerts link to each failure and relevant intervening evidence.",
+      "complete": false,
+      "reviewState": "current_implementation_and_scope_must_be_verified"
+    },
+    {
+      "id": "F07",
+      "name": "Context-compaction and growth analysis",
+      "sourceRequirements": "**Purpose:** Make context pressure and compaction-related tradeoffs inspectable.\n\n**Requirements**\n\n- Detect explicit compaction records/items through a versioned adapter; deduplicate the start/completion/legacy aliases of one operation.\n- Treat lower subsequent input as a possible context change, not proof of compaction.\n- Record automatic/manual/unknown trigger, start/end if available, source IDs, context epoch, nearby observed request counts, and any visible summary lineage.\n- Label request input before/after a compaction as a **proxy** unless actual context snapshots were captured.\n- Attribute compaction usage only when a distinct response or equivalent supported accounting scope identifies it.\n- If the parent total may already contain compaction usage, reconcile before adding any separate record.\n- Analyze repeated large rereads or repeated compaction within a task as candidate patterns, not proof that compression lost information.\n- Show context growth separately from cumulative billed/observed token consumption.\n\n**Metrics:** Explicit compaction count, interval between events, known attributable usage, unknown overhead, last eligible pre/post input measurements, and post-compaction duplicate-content candidates.\n\n**Recommendation:** Consider task boundaries, durable handoffs, or bounded tool output. Do not prescribe a fixed session size without task-quality evidence.\n\n**Acceptance:** Explicit compaction without token records shows “overhead unknown.” A model change or input drop alone does not create a confirmed compaction event. Existing cumulative totals are not reduced by a compaction merely because active context became smaller.",
+      "acceptance": "Explicit compaction without token records shows “overhead unknown.” A model change or input drop alone does not create a confirmed compaction event. Existing cumulative totals are not reduced by a compaction merely because active context became smaller.",
+      "complete": false,
+      "reviewState": "current_implementation_and_scope_must_be_verified"
+    },
+    {
+      "id": "F08",
+      "name": "Cross-agent duplicate-work analysis",
+      "sourceRequirements": "**Purpose:** Identify overlapping work while preserving valuable independent review.\n\n**Requirements**\n\n- Compare assignment evidence, tool-result fingerprints, search targets, touched files, worktree state, and time overlap across a run's agent graph.\n- Distinguish shared startup context, independent verification, intentional parallel exploration, and possible accidental duplication.\n- Show handoff messages and whether earlier findings were visibly available to another agent. Absence of a logged handoff is not proof that information was unavailable.\n- Avoid universal all-pairs comparison on large runs; index by content/target fingerprints and narrow candidate pairs first.\n- Provide “declared purpose” annotations such as implementation, review, independent test, or research.\n- Keep a duplicate-work candidate's **associated usage** separate from any unverified avoidable portion.\n- Record relationships without assuming all branches are spawned subagents; distinguish forks, resumed sessions, and explicit spawn edges.\n\n**UI:** Agent comparison with synchronized traces, common operations, differences, assignments, and a clear “intentional review” override.\n\n**Acceptance:** Two agents independently validating an API are not automatically penalized. Identical logs mirrored between machines do not become duplicate *work*. A real repeated execution by distinct response identities remains visible.",
+      "acceptance": "Two agents independently validating an API are not automatically penalized. Identical logs mirrored between machines do not become duplicate *work*. A real repeated execution by distinct response identities remains visible.",
+      "complete": false,
+      "reviewState": "current_implementation_and_scope_must_be_verified"
+    },
+    {
+      "id": "F09",
+      "name": "Outcome-aware agent efficiency assessment",
+      "sourceRequirements": "**Purpose:** Relate resource use to defensible task outcomes, not to code volume or confident final messages.\n\n**Requirements**\n\n- Attach a task contract: objective, permitted scope, acceptance tests, relevant environment, and completion criteria.\n- Record outcome as verified success, verified failure, partial, cancelled, or unverified.\n- Prefer approved structured test artifacts or user-reviewed evidence over an agent's own “done” statement.\n- Distinguish process exit success, test-suite success, and task acceptance. A zero exit code alone does not establish business correctness.\n- Track exclusive/inclusive usage, wall-clock duration, waiting, tool-active time when measured, observed retries, artifacts, and unresolved failures.\n- Do not equate lines changed, number of files, or token volume with productivity.\n- Make candidate duplication a contextual indicator, not an automatic efficiency penalty.\n- Compare similar tasks and report sample size; avoid a universal agent score as the default presentation.\n\n**Derived metrics:** Tokens per accepted task across an eligible cohort, time to first passing acceptance result, and resource distributions conditional on outcome. Failed/cancelled attempts remain part of total experiment cost.\n\n**UI:** Outcome card plus evidence drawer, not a single unexplained grade.\n\n**Acceptance:** A failed trial remains in cohort cost. An agent that writes many lines but fails acceptance is not ranked above a small correct fix. Summed parallel durations are not displayed as wall-clock duration.",
+      "acceptance": "A failed trial remains in cohort cost. An agent that writes many lines but fails acceptance is not ranked above a small correct fix. Summed parallel durations are not displayed as wall-clock duration.",
+      "complete": false,
+      "reviewState": "current_implementation_and_scope_must_be_verified",
+      "permittedScopeEvidence": {
+        "documentation": "docs/task-scope.md",
+        "test": "tests/inspectorExperiments.test.ts",
+        "nativeLog": "/tmp/agent-monitor-task-scope-layout-native.log",
+        "completeSubrequirement": "user-annotated permitted scope retained; not execution permission; export default omitted"
+      },
+      "evidencePointers": [
+        "docs/trial-tool-timing.md",
+        "tests/trialToolIntervals.test.ts",
+        "scripts/smoke-trial-timing.mjs"
+      ]
+    },
+    {
+      "id": "F10",
+      "name": "Persistent full-history timeline and search",
+      "sourceRequirements": "**Purpose:** Investigate long runs beyond the current live display window while keeping memory bounded.\n\n**Requirements**\n\n- Persist normalized event metadata, source pointers, usage observations, and permitted redacted excerpts in SQLite.\n- Use keyset/cursor pagination and virtualized rendering. Maintain bounded batches and cancellation when the selected run changes.\n- Provide chronological swimlanes for agents, turns, tools, usage, errors, findings, and compaction.\n- Allow source-order navigation when timestamps are missing, equal, out of order, or affected by machine clock skew.\n- Support search by agent, model, tool, file identity, event kind, time, finding, and approved text content.\n- Link every ledger entry and finding to exact retained evidence, including file generation and byte/line range where available.\n- Show dropped, oversized, unsupported, deleted, and unindexed regions as explicit gaps.\n- Show a run's overall history even if older content is not retained; mark unavailable details rather than substituting current file content.\n- Reindex deterministically after adapter changes, with old/new accounting-policy revisions retained for audit.\n\n**Retention semantics:** “Full history” means all eligible indexed events within the selected retention/source-availability policy. It never promises recovery of content Codex did not write, the user deleted, or the monitor deliberately did not retain.\n\n**Acceptance:** A synthetic 10,000-event run can navigate to its first and last retained events after restart. UI display caps do not change usage totals. A missing original file yields an evidence-unavailable state, not silent success.",
+      "acceptance": "A synthetic 10,000-event run can navigate to its first and last retained events after restart. UI display caps do not change usage totals. A missing original file yields an evidence-unavailable state, not silent success.",
+      "complete": false,
+      "reviewState": "current_implementation_and_scope_must_be_verified"
+    },
+    {
+      "id": "F11",
+      "name": "Budgets, anomaly alerts, and detector feedback",
+      "sourceRequirements": "**Purpose:** Surface relevant changes during a run without taking control of Codex.\n\n**Requirements**\n\n- Allow optional run/project budgets for observed tokens, known uncached input, elapsed time, and eligible API-equivalent estimates. Keep these units separate.\n- Alert on threshold crossing, large output, repeated failure, compaction bursts, and collector gaps.\n- Use warm-up periods, minimum evidence, cooldowns, and a single evolving finding for the same incident. Do not emit one notification per matching event.\n- For statistical anomalies, compare a sufficiently similar historical cohort and disclose sample size. Cold-start mode uses explicit thresholds only.\n- Suppress retrospective notification storms during imports. Existing findings still appear in reports.\n- Let the user mark findings actionable, intentional, not relevant, incorrect, or resolved; retain the annotation separately from the raw evidence.\n- Show stale/partial data beside alerts. Do not predict a hard quota exhaustion time from an unknown quota-to-token relationship.\n- Default notification bodies to redacted labels, not file contents, full paths, credentials, or prompts.\n\n**Control boundary:** Alerts are advisory. The monitor does not stop a task, consume credits, change an agent configuration, or send a message into Codex automatically.\n\n**Acceptance:** A condition recurring 100 times within one incident generates one initial alert plus controlled updates. Importing yesterday's run creates findings but no live-alert flood. A token budget uses observed/derived ledger values, not the sum of context estimates.",
+      "acceptance": "A condition recurring 100 times within one incident generates one initial alert plus controlled updates. Importing yesterday's run creates findings but no live-alert flood. A token budget uses observed/derived ledger values, not the sum of context estimates.",
+      "complete": false,
+      "reviewState": "current_implementation_and_scope_must_be_verified"
+    },
+    {
+      "id": "F12",
+      "name": "Evidence-grounded optimization advisor",
+      "sourceRequirements": "**Purpose:** Convert findings into specific, testable recommendations.\n\n**Two modes**\n\n1. **Deterministic advisor, enabled by default:** Templates turn verified detector output into suggested next actions.\n2. **Optional AI explanation:** A user-selected model receives a minimal, redacted evidence bundle after explicit authorization. Core functionality does not depend on it.\n\n**Required report structure**\n\n- What was observed, with evidence IDs.\n- Why it may matter, with the distinction between correlation and causation.\n- Plausible alternative explanations and missing evidence.\n- A proposed bounded change.\n- Risks to correctness, coverage, reproducibility, or necessary verification.\n- A validation experiment and rollback condition.\n- Expected impact as unknown or a labeled scenario, not a guaranteed savings figure.\n\n**Example suggestion:** “Replace repeated full test-log printing with a failure summary plus a saved complete log. Rerun the same acceptance task to check whether request-input usage falls without losing diagnostic success.”\n\n**Safeguards**\n\n- Every generated factual claim must resolve to a finding or source record. Unsupported output is omitted or labeled hypothesis.\n- Treat trace text as untrusted data, including instructions addressed to the model.\n- Meter the advisor's own usage separately as `monitor_overhead`; exclude it from the observed Codex task unless the user deliberately requests an all-in total.\n- Do not reanalyze the advisor's own reports recursively by default.\n- Proposed `AGENTS.md` edits are previews for human review, not automatic changes.\n\n**Acceptance:** Disabling external AI preserves all rule-based findings. A malicious trace cannot instruct the advisor to upload other files. A recommendation without measured savings never says “saved 40%.”",
+      "acceptance": "Disabling external AI preserves all rule-based findings. A malicious trace cannot instruct the advisor to upload other files. A recommendation without measured savings never says “saved 40%.”",
+      "complete": false,
+      "reviewState": "current_implementation_and_scope_must_be_verified"
+    },
+    {
+      "id": "F13",
+      "name": "Before/after experiments and benchmarks",
+      "sourceRequirements": "**Purpose:** Demonstrate whether an optimization helps under comparable conditions.\n\n**Requirements**\n\n- Define a task suite, acceptance tests, frozen input data, repository state, environment, model/configuration, and changed variable.\n- Support comparisons of instructions, tool-output policy, task decomposition, or model settings. State when several variables changed together.\n- Store each trial, including failures, cancellations, missing telemetry, and reruns. Never retain only favorable runs.\n- Keep benchmark execution separate from passive monitoring. Running code or model requests requires explicit authorization and an isolated workspace.\n- Pair variants where possible; randomize order across repeated trials where practical. Record cache state and uncontrolled provider factors rather than claiming perfect determinism.\n- Compare quality first, then total tokens, uncached input where known, time, API-equivalent estimate, retries, and compaction.\n- Report distributions, sample counts, and uncertainty appropriate to the experiment. A single before/after pair is descriptive, not proof of causality.\n- Separate illustrative token-reduction scenarios from measured improvements on reruns.\n\n**Acceptance:** A cheaper variant that fails the acceptance task cannot be labeled the overall winner. Failed setup trials remain visible. Benchmark reports name uncontrolled factors and telemetry gaps.",
+      "acceptance": "A cheaper variant that fails the acceptance task cannot be labeled the overall winner. Failed setup trials remain visible. Benchmark reports name uncontrolled factors and telemetry gaps.",
+      "complete": false,
+      "reviewState": "current_implementation_and_scope_must_be_verified",
+      "evidencePointers": [
+        "docs/trial-tool-timing.md",
+        "tests/trialToolIntervals.test.ts",
+        "scripts/smoke-trial-timing.mjs",
+        "docs/paired-comparison.md",
+        "src/shared/paired-comparison.ts",
+        "tests/pairedComparison.test.ts",
+        "scripts/smoke-paired-experiments.mjs"
+      ]
+    },
+    {
+      "id": "F14",
+      "name": "Multi-machine collectors and central inspection",
+      "sourceRequirements": "**Purpose:** Let the Mac dashboard inspect compatible Codex execution on Windows and a Linux ARM64 VPS.\n\n**Requirements**\n\n- Build a headless collector from shared parsing/accounting libraries; Electron must not be required on the VPS.\n- Support local-only mode without networking. Remote enrollment is an explicit opt-in.\n- Assign stable installation, workspace, machine, and source identities. Keep origin identity separate from the machine forwarding a copied file.\n- Use authenticated, encrypted transport with device enrollment, revocation, and workspace scoping. Prefer a private network or authenticated tunnel; never assume a private IP alone is authorization.\n- Default to metadata-only synchronization: counters, opaque IDs, time, statuses, detector output, and approved pseudonymous labels.\n- Keep raw prompts, tool arguments/results, file paths, and code local. Fine-grained remote content requests require separate authorization.\n- Persist an encrypted or equivalently protected outbound metadata spool; acknowledge only after durable ingestion.\n- Resume after disconnects using ordered batch IDs, event sequence, idempotency keys, and backpressure.\n- Retain local timestamps plus receiver timestamps and clock-offset uncertainty. Do not infer cross-machine causal ordering from wall clocks alone.\n- Show stale/offline collector state without marking its agents completed or failed.\n- Support offline export/import as a fallback using the same canonical identities.\n\n**Capability limit:** Central metadata-only mode cannot perform new semantic analysis of raw remote traces. Sensitive-content detectors run locally and send redacted results; deep inspection requires permission.\n\n**Acceptance:** A 24-hour disconnection followed by replay produces no duplicate accounting. A revoked machine cannot send new data. The ARM64 collector runs without a display server. Copied history is not counted again solely because it arrived from another host.",
+      "acceptance": "A 24-hour disconnection followed by replay produces no duplicate accounting. A revoked machine cannot send new data. The ARM64 collector runs without a display server. Copied history is not counted again solely because it arrived from another host.",
+      "complete": false,
+      "reviewState": "current_implementation_and_scope_must_be_verified",
+      "evidencePointers": [
+        "docs/codex-home-sources.md",
+        "tests/codexHomeRoots.test.ts",
+        "scripts/smoke-codex-home-collector.mjs",
+        "docs/device-loading.md",
+        "tests/inspectorDeviceActivity.test.ts",
+        "scripts/smoke-device-loading.mjs"
+      ]
+    },
+    {
+      "id": "F15",
+      "name": "Auditable cache, model, project, and price analytics",
+      "sourceRequirements": "**Purpose:** Turn ledger data into useful comparisons without misleading accounting.\n\n**Requirements**\n\n- Reuse existing model/agent charts and add model-attribution provenance, price-version inspection, and aggregate reconciliation.\n- Support task, project, machine, model/provider, service tier, date, and exclusive/inclusive agent filters.\n- Show weighted cache-read share: `sum(known C) / sum(corresponding I)`, alongside the uncovered input amount. Do not average request percentages without weighting.\n- Track model changes per eligible response or interval. Requested model, observed effective model, provider route, and quota alias are distinct fields.\n- Treat custom gateways and unresolved aliases as unpriced unless the user supplies a reviewed rate card.\n- Persist immutable price snapshots and allow explicit historical-as-of versus current-equivalent views. Do not silently reprice old exported reports.\n- Evaluate context-length pricing rules at eligible request scope, not on cumulative run input.\n- Label estimates as API-equivalent, specify assumptions/currency, and show known subtotal plus unpriced coverage.\n- Include large-cache and low-cache analysis without equating cache misses with waste.\n\n**Acceptance:** A mixed-model run is not wholly priced at its last model's rate. Missing cache fields do not become zero-priced cached usage. Two price snapshots produce independently reproducible reports.",
+      "acceptance": "A mixed-model run is not wholly priced at its last model's rate. Missing cache fields do not become zero-priced cached usage. Two price snapshots produce independently reproducible reports.",
+      "complete": false,
+      "reviewState": "current_implementation_and_scope_must_be_verified",
+      "evidencePointers": [
+        "docs/time-chart-explanations.md",
+        "scripts/smoke-time-explanations.mjs",
+        "tests/inspectorTimeCharts.test.ts"
+      ]
+    },
+    {
+      "id": "F16",
+      "name": "Reports, export, and read-only integration",
+      "sourceRequirements": "**Purpose:** Make findings reviewable outside the application and usable by a coding assistant.\n\n**Reports**\n\n- Per-run Markdown report: summary, evidence coverage, ledger totals, major findings, agent outcomes, recommendations, and limitations.\n- Machine/project summary: time-bounded eligible usage and data freshness.\n- Experiment report: variants, quality outcomes, complete trial population, resource distributions, and conclusions.\n- JSON export of normalized data with schema/adapter/policy versions; CSV export of approved tabular views.\n- Optional self-contained HTML report only after export escaping/security tests pass. PDF is not required for the initial product.\n\n**Read-only query surface**\n\n- Structured IPC/query methods for runs, usage, findings, and evidence references.\n- An optional read-only MCP adapter may expose those same methods so a coding assistant can request a redacted report.\n- No arbitrary SQL, arbitrary path reads, terminal execution, prompt injection, or account-changing methods.\n- Query limits, provenance, result truncation, and denied-content states are explicit.\n\n**Security:** Preview the redacted export before saving/sending. Prevent spreadsheet formula execution in CSV text cells. Include evidence availability; a report with missing retained source text must say so.\n\n**Acceptance:** Exported totals reconcile to the same ledger revision used by the UI. Opening exported HTML cannot execute trace-provided scripts. A read-only assistant integration cannot edit the user's project.",
+      "acceptance": "Exported totals reconcile to the same ledger revision used by the UI. Opening exported HTML cannot execute trace-provided scripts. A read-only assistant integration cannot edit the user's project.",
+      "complete": false,
+      "reviewState": "current_implementation_and_scope_must_be_verified",
+      "evidencePointers": [
+        "docs/trial-tool-timing.md",
+        "tests/trialToolIntervals.test.ts",
+        "scripts/smoke-trial-timing.mjs",
+        "docs/paired-comparison.md",
+        "src/shared/paired-comparison.ts",
+        "tests/pairedComparison.test.ts",
+        "scripts/smoke-paired-experiments.mjs"
+      ]
+    },
+    {
+      "id": "F17",
+      "name": "Privacy, permissions, and retention",
+      "sourceRequirements": "**Purpose:** Extend observability without creating an uncontrolled copy of sensitive developer activity.\n\n**Requirements**\n\n- Request access only to selected trace roots and explicitly approved optional artifact paths.\n- Never collect Codex authentication files, browser cookies, SSH keys, API keys, full environment dumps, or arbitrary home-directory contents.\n- Treat prompts, code, tool output, paths, search queries, project names, and derived fingerprints as potentially sensitive.\n- Keep detection local by default. Apply redaction and field allowlists before networking or external AI calls.\n- Use workspace-scoped keyed fingerprints where equality is needed across enrolled machines. Do not expose globally comparable hashes of short secrets or filenames.\n- Keep renderer filesystem/network privileges narrow. Validate all IPC, escape untrusted content, and prevent path traversal and unauthorized symlink targets.\n- Use OS-protected secrets storage; do not hardcode keys or store tokens in plaintext configuration.\n- Provide per-project content retention, metadata retention, export restrictions, and deletion controls. Explain which monitor-owned data will be removed and which upstream logs remain untouched.\n- Provide audit records for enrollment, remote detail access, export, and permission changes, without logging the sensitive content itself.\n- Disable telemetry by default; any opt-in diagnostic payload is previewable and bounded.\n\n**Acceptance:** A supplied secret marker appears neither in synchronized metadata nor in an advisor payload. Deleting monitor records does not delete Codex logs. Reimport suppression/tombstones prevent an opted-out run from immediately returning through sync.",
+      "acceptance": "A supplied secret marker appears neither in synchronized metadata nor in an advisor payload. Deleting monitor records does not delete Codex logs. Reimport suppression/tombstones prevent an opted-out run from immediately returning through sync.",
+      "complete": false,
+      "reviewState": "current_implementation_and_scope_must_be_verified",
+      "evidencePointers": [
+        "docs/query-bottlenecks.md",
+        "tests/inspectorProjectPrivacy.test.ts",
+        "tests/inspectorDeviceActivity.test.ts"
+      ]
+    },
+    {
+      "id": "F18",
+      "name": "Data quality and collector health",
+      "sourceRequirements": "**Purpose:** Make measurement failure visible before users trust a misleading total.\n\n**Requirements**\n\n- Show file coverage, offsets, lag, last successful parse, schema fingerprint, parser errors, skipped bytes, duplicate observations, conflicts, and unknown event types.\n- Distinguish application telemetry, provider usage, context estimates, and user annotations.\n- Allow local diagnostic export with secrets/content excluded by default.\n- Detect unsupported upgrades and downgrade capabilities instead of guessing at renamed fields.\n- Reconcile totals across response, interval, thread, and optional account scopes only when those scopes are compatible.\n- Provide a deterministic reparse operation that writes a new analysis revision before replacing the active view.\n- Keep the last valid read model available after a parser crash; label stale results.\n- Meter the monitor's own CPU, memory, storage, and optional advisor tokens.\n\n**Acceptance:** A malformed line generates a visible gap/error without blocking later valid lines. An unsupported event version does not crash other sources. A partially parsed run cannot appear as “complete and verified.”",
+      "acceptance": "A malformed line generates a visible gap/error without blocking later valid lines. An unsupported event version does not crash other sources. A partially parsed run cannot appear as “complete and verified.”",
+      "complete": false,
+      "reviewState": "current_implementation_and_scope_must_be_verified",
+      "evidencePointers": [
+        "docs/source-availability.md",
+        "src/collector/source-availability.ts",
+        "src/renderer/SourceAvailabilityPanel.tsx",
+        "tests/sourceAvailability.test.ts",
+        "scripts/smoke-source-availability.mjs",
+        "docs/device-loading.md",
+        "tests/inspectorDeviceActivity.test.ts",
+        "scripts/smoke-device-loading.mjs",
+        "docs/quota-query.md",
+        "tests/quotaQuery.test.ts",
+        "scripts/smoke-quota-loading.mjs",
+        "docs/query-bottlenecks.md",
+        "tests/inspectorProjectPrivacy.test.ts"
+      ]
+    },
+    {
+      "id": "F19",
+      "name": "Optional account quota and aggregate reconciliation",
+      "sourceRequirements": "**Purpose:** Present authorized account summaries beside local evidence without mixing their scopes.\n\nCodex App Server documents `account/usage/read` and `account/rateLimits/read`; availability depends on supported authentication and service responses. [S10]\n\n**Requirements**\n\n- Feature-detect method support and account availability; remain fully functional when unavailable.\n- Default to passive quota fields already present in authorized local records. A live account integration needs a documented, approved connection.\n- Display provider-defined window duration, reset time, measurement timestamp, and unknown fields. Do not hardcode every account to a five-hour or weekly window.\n- Compare account aggregates with local totals only after checking identity, time zone, dates, definitions, and source coverage.\n- Label unmatched usage as a reconciliation gap; do not assign it to a guessed agent or machine.\n- Never extract or duplicate authentication stores to implement monitoring.\n- Do not use write operations that reset limits, consume credits, send account emails, log out, or otherwise change the account.\n\n**Acceptance:** API-key-only or unsupported accounts show an explanatory unavailable state. Quota percentages are not converted into invented exact token allowances. Account totals and local ledger totals remain separately visible.",
+      "acceptance": "API-key-only or unsupported accounts show an explanatory unavailable state. Quota percentages are not converted into invented exact token allowances. Account totals and local ledger totals remain separately visible.",
+      "complete": false,
+      "reviewState": "current_implementation_and_scope_must_be_verified",
+      "evidencePointers": [
+        "docs/account-usage.md",
+        "src/main/AccountUsage.ts",
+        "src/renderer/AccountUsagePanel.tsx",
+        "src/renderer/AccountLimitsPanel.tsx",
+        "docs/account-limits.md",
+        "tests/accountUsage.test.ts",
+        "scripts/smoke-account-usage.mjs",
+        "docs/quota-query.md",
+        "tests/quotaQuery.test.ts",
+        "scripts/smoke-quota-loading.mjs"
+      ],
+      "scopeLimit": "0.1.21 adds explicit current account quota reads with multi-bucket windows, timestamps, unknowns, ordinary usage permission, Credits and available-reset count, alongside 0.1.14 daily activity/lifetime totals and separate passive recorded quota. Production CLI read and bounded isolated UI are proven; installed-version results are in STATE.md. No account writes, reset consumption or automatic window start. Full account identity/time/coverage reconciliation and all-platform verification remain unproven."
+    },
+    {
+      "id": "F20",
+      "name": "Optional instrumented context manifests",
+      "sourceRequirements": "**Purpose:** Improve attribution when the user deliberately controls an eligible client or execution wrapper.\n\n**Requirements**\n\n- Remain disabled in passive-monitor mode; do not intercept an unrelated Desktop process.\n- Instrument only documented/owned client boundaries. Capture an immutable manifest immediately before each controlled request, after known client-side transformations.\n- Record request identity, content-item IDs, ordering, origin, byte lengths, selected tokenizer estimates, truncation/summarization operations, and consent scope.\n- Store payload text only under a separate content policy; metadata manifests may be sufficient for some analysis.\n- Link actual response usage to the manifest. Preserve missing response usage and failed attempts.\n- Mark client-visible context as client-visible, not full server-side context. A manifest cannot reveal unobserved server additions or exact cache-span behavior.\n- Separate measurements of the user's normal Desktop workflow from experiments using an instrumented wrapper; do not silently replace one with the other.\n\n**Acceptance:** A controlled fixture proves content-order and request-ID matching. Removing a known tool payload updates the visible-context estimate but does not claim provider savings until a comparable execution measures them. Existing Desktop sessions remain untouched.",
+      "acceptance": "A controlled fixture proves content-order and request-ID matching. Removing a known tool payload updates the visible-context estimate but does not claim provider savings until a comparable execution measures them. Existing Desktop sessions remain untouched.",
+      "complete": false,
+      "reviewState": "current_implementation_and_scope_must_be_verified"
+    }
+  ],
+  "milestones": [
+    {
+      "id": "M0",
+      "name": "Baseline audit and compatibility contract",
+      "exitGate": "Existing functionality has a recorded baseline. At least one legacy usage fixture and one supported richer usage fixture are defined. Richer live Desktop support remains conditional until demonstrated on the user's approved installation.",
+      "complete": false
+    },
+    {
+      "id": "M1",
+      "name": "Trustworthy single-machine accounting and history",
+      "exitGate": "Golden totals reconcile; reimport/restart is idempotent; missing data is explicit; older retained detail is navigable; upstream graph/trace behavior is preserved.",
+      "complete": false
+    },
+    {
+      "id": "M2",
+      "name": "Practical diagnosis and visible-content estimates",
+      "exitGate": "Every finding has source evidence and limitations. Repetition is not labeled confirmed waste. Tool-output size and subsequent input exposure are separate. Detector negative fixtures pass.",
+      "complete": false
+    },
+    {
+      "id": "M3",
+      "name": "Agent outcomes and optimization workflow",
+      "exitGate": "Outcomes require evidence; recommendations preserve quality constraints; advisor usage is separately metered; external analysis is disabled by default.",
+      "complete": false
+    },
+    {
+      "id": "M4",
+      "name": "Controlled comparisons",
+      "exitGate": "Failed trials remain visible; compared scopes are compatible; a cheaper failing variant cannot win; uncontrolled variables are reported.",
+      "complete": false
+    },
+    {
+      "id": "M5",
+      "name": "Multi-machine operation",
+      "exitGate": "Offline replay does not double-count; identity conflicts are surfaced; metadata-only privacy tests pass; no display server is required on the VPS.",
+      "complete": false
+    },
+    {
+      "id": "M6",
+      "name": "Conditional deeper integrations",
+      "exitGate": "Each integration has real compatible fixtures, explicit authorization, accurate scope labels, and graceful unavailable states. No private traffic interception or guessed credentials.",
+      "complete": false
+    }
+  ],
+  "releaseChecklist": [
+    {
+      "requirement": "Baseline SHA and permission status are recorded.",
+      "complete": false
+    },
+    {
+      "requirement": "Actual supported Codex/runtime fixtures are documented.",
+      "complete": false
+    },
+    {
+      "requirement": "Upstream functionality preserved by regression tests.",
+      "complete": false
+    },
+    {
+      "requirement": "Request, interval, aggregate, and context-estimate scopes remain distinct.",
+      "complete": false
+    },
+    {
+      "requirement": "Replays, mirrors, forks, caches, reasoning, and parent/child totals do not double-count.",
+      "complete": false
+    },
+    {
+      "requirement": "Unknown/conflicted data remains visible in UI and exports.",
+      "complete": false
+    },
+    {
+      "requirement": "Totals can be traced to retained source evidence and accounting revisions.",
+      "complete": false
+    },
+    {
+      "requirement": "Persistent history works within the explicit retention policy.",
+      "complete": false
+    },
+    {
+      "requirement": "Findings contain evidence, alternatives, and uncertainty; not automatic waste verdicts.",
+      "complete": false
+    },
+    {
+      "requirement": "Task quality is part of efficiency/benchmark conclusions.",
+      "complete": false
+    },
+    {
+      "requirement": "Advisor, sync, account integration, and benchmark execution require opt-in.",
+      "complete": false
+    },
+    {
+      "requirement": "Secrets/content are excluded from default remote metadata and notifications.",
+      "complete": false
+    },
+    {
+      "requirement": "Source logs and unrelated repositories remain unchanged.",
+      "complete": false
+    },
+    {
+      "requirement": "Platform, security, and resource tests have actual recorded outcomes.",
+      "complete": false
+    },
+    {
+      "requirement": "Reports identify their model/price/adapter/policy versions and limitations.",
+      "complete": false
+    },
+    {
+      "requirement": "Release notes distinguish implemented, experimental, conditional, and deferred functions.",
+      "complete": false
+    }
+  ],
+  "taskStudio": {
+    "evidence": "docs/task-studio.md",
+    "nativeLog": "/tmp/agent-monitor-task-studio-native-20261015.log",
+    "wideScreenshot": "/tmp/agent-monitor-task-studio-wide.png",
+    "narrowScreenshot": "/tmp/agent-monitor-task-studio-narrow.png",
+    "scenarios": [
+      "USD/Token same-run scenario200tokens→0.0004USD",
+      "otherRun100tokens→0.0002USD",
+      "sourceTrace Details/Bymodel retained",
+      "metadataSearch/nodefocus/Escapefocus/runisolation",
+      "1512px/1100px viewport no horizontaloverflow"
+    ],
+    "scope": "isolated actualElectron runtime withsynthetic source andfixture-only uniformprice2perMillion",
+    "actualUserScreenProven": false,
+    "fullA11yOrPlatforms": false
+  },
+  "runAcceptance": {
+    "evidence": "docs/run-acceptance.md",
+    "unitLog": "/tmp/agent-monitor-run-task-unit-20261015.log",
+    "nativeLog": "/tmp/agent-monitor-run-task-native-20261015.log",
+    "scenarios": [
+      "latest immutable contract byRun",
+      "observed trial machine isolation andsource evidence",
+      "unknown result remainsunknown",
+      "Task/selectedAgent/exclusive/inclusive scope100/200",
+      "source append preservesinclusive",
+      "correct preselectedRun inacceptance page",
+      "notesrenderastext"
+    ],
+    "scope": "bounded readmodel andisolated actualElectron dataflow; eight relatedcases",
+    "fullM3Certification": false
+  },
+  "interfaceEvidence": {
+    "unknownRankingExplanations": {
+      "version": "0.1.25",
+      "document": "docs/unknown-cost-explanations.md",
+      "script": "scripts/smoke-unknown-cost.mjs",
+      "scope": "Unknown model/project rankings open missing-field explanations in USD and Token modes, preserving known amounts and Requested/Observed distinctions. Real isolated Collector/Electron flow covers automatic/uniform/components, immutable open reading, keyboard/privacy and unchanged36-token ledger. Installed native model and Project explanations plus Project screenshot verified; this does not certify all14.2 or platform/accessibility requirements."
+    },
+    "savedIncidentLoading": {
+      "version": "0.1.24",
+      "document": "docs/incident-loading.md",
+      "script": "scripts/smoke-overview-insights.mjs",
+      "scope": "Saved-record first-load/error/confirmed-empty states, retained same-scope reading time, retry, scope remount and privacy epoch. Extended isolated actual Electron flow passes; installed native first-load state is confirmed. No full platform/accessibility completion claimed."
+    },
+    "overviewInvestigation": {
+      "version": "0.1.23",
+      "document": "docs/overview-insights.md",
+      "script": "scripts/smoke-overview-insights.mjs",
+      "scope": "Filtered ledger types, workspace source-state snapshot, and first three saved incidents using existing bounded read. Actual isolated SQLite/Collector/detector/Electron evidence navigation plus coalescing, scope/privacy fences and retained failure state pass. Installed native results are recorded in STATE.md; full UI/platform/accessibility completion remains unproven."
+    },
+    "overviewCostFirst": {
+      "version": "0.1.22",
+      "document": "docs/overview-layout.md",
+      "script": "scripts/smoke-account-usage.mjs",
+      "scope": "Canonical USD/token total leads the overview, followed by daily charts and device comparison. Native disclosure keeps official account panels mounted across navigation. Isolated keyboard/account flow and two representative viewports pass; actual installed AX and screenshot show live total, charts and disclosure. Full UI/platform/accessibility completion remains unproven."
+    },
+    "qualityWorkspace": {
+      "version": "0.1.20",
+      "document": "docs/quality-workspace.md",
+      "script": "scripts/smoke-quality-workspace.mjs",
+      "scope": "Four mounted-on-demand quality sections, scope propagation, keyboard and two representative isolated viewport images. Installed native AX confirmed the four entries, coverage content and Collector health rows; native clicks and screenshots disagreed, so live quota/resource navigation is not certified. Full UI/platform/accessibility completion remains unproven."
+    }
+  }
+}

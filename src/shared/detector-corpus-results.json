@@ -1,0 +1,473 @@
+{
+  "schemaVersion": "detector-evaluation/1",
+  "state": "measured",
+  "corpusId": "synthetic-candidates-2026-10-15",
+  "sourceDigest": "c0a0bf157af55c12f2a516dd95ac2d529e7ccc29ba903dcb5d09e133643a8b7d",
+  "corpusDigest": "d31d6d59588615431ac038574a9b0f577e2ac43b67134ab17295f5cc07eadacf",
+  "measuredAt": "2026-10-15T18:44:37.250Z",
+  "reviewedAt": "2026-10-15",
+  "reviewedBy": "Codex manual review of explicit synthetic scenarios; no independent human-label claim",
+  "labelingPolicy": "One case / target detector is one scoring unit. Pattern labels describe recorded recurrence, size, compaction or parse gaps. Candidate labels mean eligible for a bounded investigation/trial, not proven waste or savings. Explicit verification, post-edit checks and user annotations are review-only. Missing capture capability is unscored. Other detectors are outside each case's target label.",
+  "caseCount": 24,
+  "unit": "case_target_detector",
+  "synthetic": true,
+  "pattern": {
+    "truePositive": 12,
+    "falsePositive": 0,
+    "falseNegative": 0,
+    "trueNegative": 11,
+    "unscored": 1,
+    "precision": 1,
+    "recall": 1
+  },
+  "candidate": {
+    "truePositive": 5,
+    "falsePositive": 0,
+    "falseNegative": 0,
+    "trueNegative": 18,
+    "unscored": 1,
+    "precision": 1,
+    "recall": 1
+  },
+  "detectors": [
+    {
+      "id": "repeated-read",
+      "cases": 7,
+      "versions": [
+        "2"
+      ],
+      "pattern": {
+        "truePositive": 4,
+        "falsePositive": 0,
+        "falseNegative": 0,
+        "trueNegative": 2,
+        "unscored": 1,
+        "precision": 1,
+        "recall": 1
+      },
+      "candidate": {
+        "truePositive": 1,
+        "falsePositive": 0,
+        "falseNegative": 0,
+        "trueNegative": 5,
+        "unscored": 1,
+        "precision": 1,
+        "recall": 1
+      }
+    },
+    {
+      "id": "retry-recurrence",
+      "cases": 6,
+      "versions": [
+        "2"
+      ],
+      "pattern": {
+        "truePositive": 3,
+        "falsePositive": 0,
+        "falseNegative": 0,
+        "trueNegative": 3,
+        "unscored": 0,
+        "precision": 1,
+        "recall": 1
+      },
+      "candidate": {
+        "truePositive": 1,
+        "falsePositive": 0,
+        "falseNegative": 0,
+        "trueNegative": 5,
+        "unscored": 0,
+        "precision": 1,
+        "recall": 1
+      }
+    },
+    {
+      "id": "large-output",
+      "cases": 3,
+      "versions": [
+        "2"
+      ],
+      "pattern": {
+        "truePositive": 2,
+        "falsePositive": 0,
+        "falseNegative": 0,
+        "trueNegative": 1,
+        "unscored": 0,
+        "precision": 1,
+        "recall": 1
+      },
+      "candidate": {
+        "truePositive": 1,
+        "falsePositive": 0,
+        "falseNegative": 0,
+        "trueNegative": 2,
+        "unscored": 0,
+        "precision": 1,
+        "recall": 1
+      }
+    },
+    {
+      "id": "compaction-burst",
+      "cases": 4,
+      "versions": [
+        "2"
+      ],
+      "pattern": {
+        "truePositive": 1,
+        "falsePositive": 0,
+        "falseNegative": 0,
+        "trueNegative": 3,
+        "unscored": 0,
+        "precision": 1,
+        "recall": 1
+      },
+      "candidate": {
+        "truePositive": 1,
+        "falsePositive": 0,
+        "falseNegative": 0,
+        "trueNegative": 3,
+        "unscored": 0,
+        "precision": 1,
+        "recall": 1
+      }
+    },
+    {
+      "id": "collector-gap",
+      "cases": 4,
+      "versions": [
+        "1"
+      ],
+      "pattern": {
+        "truePositive": 2,
+        "falsePositive": 0,
+        "falseNegative": 0,
+        "trueNegative": 2,
+        "unscored": 0,
+        "precision": 1,
+        "recall": 1
+      },
+      "candidate": {
+        "truePositive": 1,
+        "falsePositive": 0,
+        "falseNegative": 0,
+        "trueNegative": 3,
+        "unscored": 0,
+        "precision": 1,
+        "recall": 1
+      }
+    }
+  ],
+  "cases": [
+    {
+      "id": "read-repeat",
+      "detectorId": "repeated-read",
+      "expectedPattern": true,
+      "expectedCandidate": true,
+      "observedPattern": true,
+      "observedCandidate": true,
+      "emittedFindings": 1,
+      "detectorVersions": [
+        "2"
+      ],
+      "suppressedFindings": 0,
+      "rationale": "Three unchanged complete reads of the same target and text; no recorded verification intent."
+    },
+    {
+      "id": "read-two",
+      "detectorId": "repeated-read",
+      "expectedPattern": false,
+      "expectedCandidate": false,
+      "observedPattern": false,
+      "observedCandidate": false,
+      "emittedFindings": 0,
+      "detectorVersions": [],
+      "suppressedFindings": 0,
+      "rationale": "Two observations do not establish the defined three-read recurrence."
+    },
+    {
+      "id": "read-changing",
+      "detectorId": "repeated-read",
+      "expectedPattern": false,
+      "expectedCandidate": false,
+      "observedPattern": false,
+      "observedCandidate": false,
+      "emittedFindings": 0,
+      "detectorVersions": [],
+      "suppressedFindings": 0,
+      "rationale": "Read text changes; exact-content recurrence is absent."
+    },
+    {
+      "id": "read-verify",
+      "detectorId": "repeated-read",
+      "expectedPattern": true,
+      "expectedCandidate": false,
+      "observedPattern": true,
+      "observedCandidate": false,
+      "emittedFindings": 1,
+      "detectorVersions": [
+        "2"
+      ],
+      "suppressedFindings": 1,
+      "rationale": "Repeated text exists but the task explicitly requires independent verification."
+    },
+    {
+      "id": "read-after-edit",
+      "detectorId": "repeated-read",
+      "expectedPattern": true,
+      "expectedCandidate": false,
+      "observedPattern": true,
+      "observedCandidate": false,
+      "emittedFindings": 1,
+      "detectorVersions": [
+        "2"
+      ],
+      "suppressedFindings": 1,
+      "rationale": "Recorded edit precedes the reads; required post-change checks remain review-only."
+    },
+    {
+      "id": "read-partial",
+      "detectorId": "repeated-read",
+      "expectedPattern": true,
+      "expectedCandidate": false,
+      "observedPattern": true,
+      "observedCandidate": false,
+      "emittedFindings": 1,
+      "detectorVersions": [
+        "2"
+      ],
+      "suppressedFindings": 1,
+      "rationale": "Captured fragments repeat, but complete source equality is not established."
+    },
+    {
+      "id": "read-no-key",
+      "detectorId": "repeated-read",
+      "expectedPattern": null,
+      "expectedCandidate": null,
+      "observedPattern": false,
+      "observedCandidate": false,
+      "emittedFindings": 0,
+      "detectorVersions": [],
+      "suppressedFindings": 0,
+      "rationale": "Missing keyed equality capability; do not score unknown as a true negative."
+    },
+    {
+      "id": "retry-three",
+      "detectorId": "retry-recurrence",
+      "expectedPattern": true,
+      "expectedCandidate": true,
+      "observedPattern": true,
+      "observedCandidate": true,
+      "emittedFindings": 1,
+      "detectorVersions": [
+        "2"
+      ],
+      "suppressedFindings": 0,
+      "rationale": "Three comparable failed commands in one ten-minute window, with no recorded progress."
+    },
+    {
+      "id": "retry-two",
+      "detectorId": "retry-recurrence",
+      "expectedPattern": false,
+      "expectedCandidate": false,
+      "observedPattern": false,
+      "observedCandidate": false,
+      "emittedFindings": 0,
+      "detectorVersions": [],
+      "suppressedFindings": 0,
+      "rationale": "Only two comparable failures."
+    },
+    {
+      "id": "retry-verify",
+      "detectorId": "retry-recurrence",
+      "expectedPattern": true,
+      "expectedCandidate": false,
+      "observedPattern": true,
+      "observedCandidate": false,
+      "emittedFindings": 1,
+      "detectorVersions": [
+        "2"
+      ],
+      "suppressedFindings": 1,
+      "rationale": "Explicit retry/verification protocol makes this necessary repetition."
+    },
+    {
+      "id": "retry-success",
+      "detectorId": "retry-recurrence",
+      "expectedPattern": true,
+      "expectedCandidate": false,
+      "observedPattern": true,
+      "observedCandidate": false,
+      "emittedFindings": 1,
+      "detectorVersions": [
+        "2"
+      ],
+      "suppressedFindings": 1,
+      "rationale": "Comparable command subsequently succeeds; preserved evidence is review-only, not ongoing failed work."
+    },
+    {
+      "id": "retry-edits",
+      "detectorId": "retry-recurrence",
+      "expectedPattern": false,
+      "expectedCandidate": false,
+      "observedPattern": false,
+      "observedCandidate": false,
+      "emittedFindings": 0,
+      "detectorVersions": [],
+      "suppressedFindings": 0,
+      "rationale": "Edits between attempts establish changed diagnostic steps rather than one unchanged episode."
+    },
+    {
+      "id": "retry-polling",
+      "detectorId": "retry-recurrence",
+      "expectedPattern": false,
+      "expectedCandidate": false,
+      "observedPattern": false,
+      "observedCandidate": false,
+      "emittedFindings": 0,
+      "detectorVersions": [],
+      "suppressedFindings": 0,
+      "rationale": "Repeated observations of the same process handle are polling, not new failed attempts."
+    },
+    {
+      "id": "large-output",
+      "detectorId": "large-output",
+      "expectedPattern": true,
+      "expectedCandidate": true,
+      "observedPattern": true,
+      "observedCandidate": true,
+      "emittedFindings": 1,
+      "detectorVersions": [
+        "2"
+      ],
+      "suppressedFindings": 0,
+      "rationale": "Complete captured output meets the declared 256-KiB size boundary; reduction still needs a trial."
+    },
+    {
+      "id": "large-below",
+      "detectorId": "large-output",
+      "expectedPattern": false,
+      "expectedCandidate": false,
+      "observedPattern": false,
+      "observedCandidate": false,
+      "emittedFindings": 0,
+      "detectorVersions": [],
+      "suppressedFindings": 0,
+      "rationale": "Complete output is below the published size definition."
+    },
+    {
+      "id": "large-intentional",
+      "detectorId": "large-output",
+      "expectedPattern": true,
+      "expectedCandidate": false,
+      "observedPattern": true,
+      "observedCandidate": false,
+      "emittedFindings": 1,
+      "detectorVersions": [
+        "2"
+      ],
+      "suppressedFindings": 1,
+      "rationale": "User annotation declares this complete evidence necessary; do not offer an optimization candidate."
+    },
+    {
+      "id": "compaction-three",
+      "detectorId": "compaction-burst",
+      "expectedPattern": true,
+      "expectedCandidate": true,
+      "observedPattern": true,
+      "observedCandidate": true,
+      "emittedFindings": 1,
+      "detectorVersions": [
+        "2"
+      ],
+      "suppressedFindings": 0,
+      "rationale": "Three distinct completed operation IDs within five minutes."
+    },
+    {
+      "id": "compaction-duplicate",
+      "detectorId": "compaction-burst",
+      "expectedPattern": false,
+      "expectedCandidate": false,
+      "observedPattern": false,
+      "observedCandidate": false,
+      "emittedFindings": 0,
+      "detectorVersions": [],
+      "suppressedFindings": 0,
+      "rationale": "Repeated lifecycle notifications share one operation ID; they are one operation."
+    },
+    {
+      "id": "compaction-starts",
+      "detectorId": "compaction-burst",
+      "expectedPattern": false,
+      "expectedCandidate": false,
+      "observedPattern": false,
+      "observedCandidate": false,
+      "emittedFindings": 0,
+      "detectorVersions": [],
+      "suppressedFindings": 0,
+      "rationale": "Started operations without completion do not establish a completed burst."
+    },
+    {
+      "id": "compaction-wide",
+      "detectorId": "compaction-burst",
+      "expectedPattern": false,
+      "expectedCandidate": false,
+      "observedPattern": false,
+      "observedCandidate": false,
+      "emittedFindings": 0,
+      "detectorVersions": [],
+      "suppressedFindings": 0,
+      "rationale": "Distinct operations are spaced six minutes apart, outside one burst window."
+    },
+    {
+      "id": "parse-gap",
+      "detectorId": "collector-gap",
+      "expectedPattern": true,
+      "expectedCandidate": true,
+      "observedPattern": true,
+      "observedCandidate": true,
+      "emittedFindings": 1,
+      "detectorVersions": [
+        "1"
+      ],
+      "suppressedFindings": 0,
+      "rationale": "A terminated malformed JSONL record creates a retained parse gap."
+    },
+    {
+      "id": "parse-unsupported",
+      "detectorId": "collector-gap",
+      "expectedPattern": false,
+      "expectedCandidate": false,
+      "observedPattern": false,
+      "observedCandidate": false,
+      "emittedFindings": 0,
+      "detectorVersions": [],
+      "suppressedFindings": 0,
+      "rationale": "A valid future envelope is unsupported, not a malformed-record gap."
+    },
+    {
+      "id": "parse-tail",
+      "detectorId": "collector-gap",
+      "expectedPattern": false,
+      "expectedCandidate": false,
+      "observedPattern": false,
+      "observedCandidate": false,
+      "emittedFindings": 0,
+      "detectorVersions": [],
+      "suppressedFindings": 0,
+      "rationale": "An unterminated partial record remains pending, not a completed parse gap."
+    },
+    {
+      "id": "parse-resolved",
+      "detectorId": "collector-gap",
+      "expectedPattern": true,
+      "expectedCandidate": false,
+      "observedPattern": true,
+      "observedCandidate": false,
+      "emittedFindings": 1,
+      "detectorVersions": [
+        "1"
+      ],
+      "suppressedFindings": 1,
+      "rationale": "Gap evidence remains, but resolved user feedback makes the plan review-only."
+    }
+  ]
+}

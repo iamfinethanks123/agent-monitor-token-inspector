@@ -1,0 +1,15 @@
+# 未識別模型／Project 成本解釋
+
+0.1.25接通原本CostRanking停用嘅模型未知／Project未識別按鈕，直接使用既有可存取嘅provenance視窗。顯示缺少Observed／RequestedModel或Project身份、組內成員及Token數、未定價數、可換算金額／範圍、目前價目模式同開啟時嘅帳本／價目版本。均一／分項自訂價目顯示實際每百萬Token費率。
+
+未知模型喺按模型自動換算時仍未定價；唔猜成另一模型。未知Project唔代表已知模型無法計價，可換算部分保留，未定價部分唔填零。均一價目毋須模型身份，所以即使模型未知亦可有已換算金額。視窗用獨立顯示文字保留USD金額，唔將USD units塞入Token整數metric；原有數值來源分類保持未知身份／Monitor推導。
+
+按未知組只開解釋，唔寫入帳本／價目，亦唔以`(unknown)`字串假裝已知model或Project篩選。已知組原有帳本跳轉保持。解釋固定於開啟時結果；背景價目更新唔改寫已打開視窗，關閉再開先讀新結果。沿用既有焦點圈、Escape關閉、回到原按鈕及私隱變更關閉行為。
+
+Token模式亦可開未知排行解釋，保留已知Token總量。該模式模型分組用Requested Model，與美元模式優先Observed／再Requested嘅分組不同；Requested未知唔推斷Observed亦未知。解釋使用對應分組嘅成員數及總量，唔混入另一種模型分組或美元值。
+
+smoke-unknown-cost.mjs使用3個真實隔離Collector來源／SQLite及Electron IPC：未知模型、自帶模型但無Project、已知Project；合計36tokens。已知Project用固定測試指紋種子建立，唔依賴本機OS授權，亦唔讀取Monitor指紋或登入檔。核對未知保持null、Project已換算部分、切換均一價目、開啟快照不變、Keyboard／focus／privacy、已知模型帳本24tokens及全域36tokens保持。最初無測試指紋時全部Project按既有規則保持未知；已補隔離seed，冇為測試放寬產品識別規則。實際安裝畫面證據見STATE.md。
+
+最後流程亦核對Token模型未知組36tokens但Observed模型成本組只含12未知tokens，Project未知組24tokens；均一2USD／百萬及分項Input1／Cache0.1／Output3USD費率文字正確，價格變更後舊視窗仍保持原快照。只改renderer解釋，冇新增query語義、IPC或後端計價規則。
+
+0.1.25已安裝，8個runtime檔案及穩定簽署核對。原生真實未知模型按鈕已啟用並打開5筆／103,880,589tokens／5未定價嘅解釋；Project未識別按鈕打開$263.07、2,664筆／660,848,998tokens／0未定價，保留已知金額，AX及實際原生截圖一致。當時快照revision4199；資料會隨正常收集改變，唔當成目前帳戶帳單。冇為驗證改用戶價目或身份。

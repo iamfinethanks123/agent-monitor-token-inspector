@@ -1,0 +1,33 @@
+{
+  "schemaVersion": "reviewed-detector-corpus/1",
+  "id": "synthetic-candidates-2026-10-15",
+  "reviewedAt": "2026-10-15",
+  "reviewedBy": "Codex manual review of explicit synthetic scenarios; no independent human-label claim",
+  "labelingPolicy": "One case / target detector is one scoring unit. Pattern labels describe recorded recurrence, size, compaction or parse gaps. Candidate labels mean eligible for a bounded investigation/trial, not proven waste or savings. Explicit verification, post-edit checks and user annotations are review-only. Missing capture capability is unscored. Other detectors are outside each case's target label.",
+  "cases": [
+    {"id":"read-repeat","detectorId":"repeated-read","scenario":"read","count":3,"pattern":true,"candidate":true,"rationale":"Three unchanged complete reads of the same target and text; no recorded verification intent."},
+    {"id":"read-two","detectorId":"repeated-read","scenario":"read","count":2,"pattern":false,"candidate":false,"rationale":"Two observations do not establish the defined three-read recurrence."},
+    {"id":"read-changing","detectorId":"repeated-read","scenario":"read","count":3,"changing":true,"pattern":false,"candidate":false,"rationale":"Read text changes; exact-content recurrence is absent."},
+    {"id":"read-verify","detectorId":"repeated-read","scenario":"read","count":3,"verify":true,"pattern":true,"candidate":false,"rationale":"Repeated text exists but the task explicitly requires independent verification."},
+    {"id":"read-after-edit","detectorId":"repeated-read","scenario":"read","count":3,"edit":true,"pattern":true,"candidate":false,"rationale":"Recorded edit precedes the reads; required post-change checks remain review-only."},
+    {"id":"read-partial","detectorId":"repeated-read","scenario":"read","count":3,"partial":true,"pattern":true,"candidate":false,"rationale":"Captured fragments repeat, but complete source equality is not established."},
+    {"id":"read-no-key","detectorId":"repeated-read","scenario":"read","count":3,"noKey":true,"pattern":null,"candidate":null,"rationale":"Missing keyed equality capability; do not score unknown as a true negative."},
+    {"id":"retry-three","detectorId":"retry-recurrence","scenario":"retry","count":3,"pattern":true,"candidate":true,"rationale":"Three comparable failed commands in one ten-minute window, with no recorded progress."},
+    {"id":"retry-two","detectorId":"retry-recurrence","scenario":"retry","count":2,"pattern":false,"candidate":false,"rationale":"Only two comparable failures."},
+    {"id":"retry-verify","detectorId":"retry-recurrence","scenario":"retry","count":3,"verify":true,"pattern":true,"candidate":false,"rationale":"Explicit retry/verification protocol makes this necessary repetition."},
+    {"id":"retry-success","detectorId":"retry-recurrence","scenario":"retry","count":3,"success":true,"pattern":true,"candidate":false,"rationale":"Comparable command subsequently succeeds; preserved evidence is review-only, not ongoing failed work."},
+    {"id":"retry-edits","detectorId":"retry-recurrence","scenario":"retry","count":3,"edit":true,"pattern":false,"candidate":false,"rationale":"Edits between attempts establish changed diagnostic steps rather than one unchanged episode."},
+    {"id":"retry-polling","detectorId":"retry-recurrence","scenario":"polling","count":3,"pattern":false,"candidate":false,"rationale":"Repeated observations of the same process handle are polling, not new failed attempts."},
+    {"id":"large-output","detectorId":"large-output","scenario":"large","count":1,"bytes":262144,"pattern":true,"candidate":true,"rationale":"Complete captured output meets the declared 256-KiB size boundary; reduction still needs a trial."},
+    {"id":"large-below","detectorId":"large-output","scenario":"large","count":1,"bytes":262143,"pattern":false,"candidate":false,"rationale":"Complete output is below the published size definition."},
+    {"id":"large-intentional","detectorId":"large-output","scenario":"large","count":1,"bytes":262144,"annotation":"intentional","pattern":true,"candidate":false,"rationale":"User annotation declares this complete evidence necessary; do not offer an optimization candidate."},
+    {"id":"compaction-three","detectorId":"compaction-burst","scenario":"compaction","count":3,"pattern":true,"candidate":true,"rationale":"Three distinct completed operation IDs within five minutes."},
+    {"id":"compaction-duplicate","detectorId":"compaction-burst","scenario":"compaction","count":3,"duplicate":true,"pattern":false,"candidate":false,"rationale":"Repeated lifecycle notifications share one operation ID; they are one operation."},
+    {"id":"compaction-starts","detectorId":"compaction-burst","scenario":"compaction","count":3,"starts":true,"pattern":false,"candidate":false,"rationale":"Started operations without completion do not establish a completed burst."},
+    {"id":"compaction-wide","detectorId":"compaction-burst","scenario":"compaction","count":3,"wide":true,"pattern":false,"candidate":false,"rationale":"Distinct operations are spaced six minutes apart, outside one burst window."},
+    {"id":"parse-gap","detectorId":"collector-gap","scenario":"gap","count":1,"pattern":true,"candidate":true,"rationale":"A terminated malformed JSONL record creates a retained parse gap."},
+    {"id":"parse-unsupported","detectorId":"collector-gap","scenario":"unsupported","count":1,"pattern":false,"candidate":false,"rationale":"A valid future envelope is unsupported, not a malformed-record gap."},
+    {"id":"parse-tail","detectorId":"collector-gap","scenario":"tail","count":1,"pattern":false,"candidate":false,"rationale":"An unterminated partial record remains pending, not a completed parse gap."},
+    {"id":"parse-resolved","detectorId":"collector-gap","scenario":"gap","count":1,"annotation":"resolved","pattern":true,"candidate":false,"rationale":"Gap evidence remains, but resolved user feedback makes the plan review-only."}
+  ]
+}

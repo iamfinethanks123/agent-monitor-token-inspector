@@ -1,16 +1,14 @@
 import type { Agent, ModelTokenUsage } from './types';
+import { AUTOMATIC_USD_DEFINITION } from './automatic-usd-prices';
 
-export const PRICING_VERIFIED_AT = '2026-09-16';
+export const PRICING_VERIFIED_AT = '2026-09-16; OpenAI updated 2026-10-13';
 export const PRICING_SOURCES = ['https://developers.openai.com/api/docs/pricing','https://platform.claude.com/docs/en/about-claude/pricing','https://docs.x.ai/developers/pricing'];
 type Rate = { vendor:string; input:number; read:number; write?:number; write1h?:number; output:number; threshold?:number; thresholdInclusive?:boolean; long?:{input:number;read:number;write:number;output:number} };
 const rates:Record<string,Rate> = {};
-function openai(model:string,input:number,output:number) {
-  rates[model]={vendor:'openai',input,read:input/10,write:input*1.25,output,threshold:272000,long:{input:input*2,read:input/5,write:input*2.5,output:output*1.5}};
+for (const card of AUTOMATIC_USD_DEFINITION.catalog) {
+  const input=Number(card.inputRate),read=Number(card.cachedInputRate),write=Number(card.cacheWriteRate),output=Number(card.outputRate);
+  rates[card.model]={vendor:'openai',input,read,write,output,threshold:272000,long:{input:input*2,read:read*2,write:write*2,output:output*1.5}};
 }
-openai('gpt-6-astra',10,50);
-openai('gpt-5.6-sol',4,20);
-openai('gpt-5.6-terra',2,12);
-openai('gpt-5.6-luna',0.2,1.2);
 rates['gpt-5.5']={vendor:'openai',input:5,read:.5,output:30,threshold:272000,long:{input:10,read:1,write:0,output:45}};
 rates['gpt-5.5-2026-04-23']=rates['gpt-5.5'];
 for (const [model,input,output] of [

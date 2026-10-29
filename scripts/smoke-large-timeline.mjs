@@ -1,0 +1,54 @@
+import { _electron as electron, expect } from '@playwright/test';
+import { mkdtemp, mkdir, writeFile, rm } from 'node:fs/promises';
+import { spawnSync } from 'node:child_process';
+import path from 'node:path';
+import os from 'node:os';
+
+const root = await mkdtemp(path.join(os.tmpdir(), 'timeline-10000-native-'));
+const traces = path.join(root, 'traces'); const userData = path.join(root, 'user-data');
+const executable = path.resolve('node_modules/electron/dist/Electron.app/Contents/MacOS/Electron');
+let app;
+try {
+  await mkdir(traces); await mkdir(path.join(userData, 'inspector'), { recursive: true });
+  const rows = [{ type: 'session_meta', payload: { id: 'large-timeline-native', model_provider: 'openai' } }];
+  for (let i = 1; i <= 10000; i++) rows.push({ type: 'response_item', timestamp: new Date(Date.UTC(2026, 9, 14) + i).toISOString(), payload: { type: 'message', role: 'assistant', content: [{ type: 'output_text', text: `Synthetic metadata ${i} ` + 'x'.repeat(960) }] } });
+  await writeFile(path.join(traces, 'run.jsonl'), rows.map(row => JSON.stringify(row)).join('\n') + '\n');
+  const seeded = spawnSync(executable, ['--import', 'tsx', '--input-type=module', '-e', "import{InspectorStore}from './src/storage/InspectorStore.ts';import{IndexCollector}from './src/collector/IndexCollector.ts';const s=new InspectorStore(process.argv[1]);try{await new IndexCollector(s,[process.argv[2]]).scan();}finally{s.close();}", path.join(userData, 'inspector', 'index.sqlite'), traces], { env: { ...process.env, ELECTRON_RUN_AS_NODE: '1' }, encoding: 'utf8' });
+  if (seeded.status !== 0) throw new Error(seeded.stderr);
+  app = await electron.launch({ executablePath: executable, args: [process.cwd(), `--user-data-dir=${userData}`], env: { ...process.env, AGENT_MONITOR_TRACE_ROOT: traces, AGENT_MONITOR_USER_DATA: userData, ELECTRON_USER_DATA_DIR: userData, AGENT_MONITOR_RECEIVER_PORT: '0', ELECTRON_IS_DEV: '0' } });
+  const page = await app.firstWindow();
+  await page.getByRole('button', { name: /^(執行歷史|History)$/, exact: true }).click();
+  const viewport = page.getByLabel('Virtualized timeline');
+  await expect(viewport.locator('.timeline-row').first()).toBeVisible({ timeout: 20000 });
+  await expect(page.locator('.timeline-summary')).toContainText('10,001');
+  const samples = [];
+  const sample = async label => {
+    const metrics = await app.evaluate(({ app }) => app.getAppMetrics().filter(item => item.type === 'Tab').map(item => ({ pid: item.pid, workingSetKiB: item.memory.workingSetSize, peakWorkingSetKiB: item.memory.peakWorkingSetSize })));
+    expect(metrics.length).toBeGreaterThan(0); expect(metrics.some(metric => metric.workingSetKiB > 0)).toBe(true);
+    samples.push({ label, metrics, renderedRows: await viewport.locator('.timeline-row').count() });
+    expect(samples.at(-1).renderedRows).toBeLessThanOrEqual(10);
+  };
+  await sample('first-page');
+  await viewport.focus(); await page.keyboard.press('ArrowDown');
+  await expect(viewport.locator('.timeline-row[aria-pressed="true"]')).toHaveCount(1);
+  await expect(page.getByLabel('Selected timeline event')).toContainText('line 1');
+  expect(await viewport.evaluate(element => getComputedStyle(element).outlineStyle)).not.toBe('none');
+  await page.keyboard.press('Home');
+  await page.keyboard.press('End'); await expect(page.getByLabel('Selected timeline event')).toContainText('line 200');
+  await page.keyboard.press('Home'); await expect(page.getByLabel('Selected timeline event')).toContainText('line 1');
+  await sample('keyboard-page');
+  await page.getByRole('button', { name: /^(最新|Latest)$/, exact: true }).click();
+  await expect(page.locator('.timeline-summary')).toContainText('10,001');
+  await expect(page.getByRole('button', { name: /^(下一批|Next batch)$/, exact: true })).toBeEnabled();
+  await viewport.focus(); await page.keyboard.press('Home'); await expect(page.getByLabel('Selected timeline event')).toContainText('line 10001');
+  await sample('latest-page');
+  await page.getByRole('button', { name: /^(下一批|Next batch)$/, exact: true }).click();
+  await expect(page.getByRole('button', { name: /^(上一批|Previous batch)$/, exact: true })).toBeEnabled();
+  await expect(viewport.locator('.timeline-row').first()).toContainText('#9801');
+  await sample('next-page');
+  const memoryBytes = Math.max(...samples.flatMap(item => item.metrics.map(metric => Math.max(metric.workingSetKiB, metric.peakWorkingSetKiB) * 1024)));
+  expect(memoryBytes).toBeLessThan(1024 * 1024 * 1024);
+  await writeFile('/tmp/agent-monitor-timeline-renderer-measurement.json', JSON.stringify({ schemaVersion: 'renderer-measurement/1', synthetic: true, messages: 10000, records: 10001, platform: process.platform, arch: process.arch, samples, observedPeakWorkingSetBytes: memoryBytes, source: 'Electron app.getAppMetrics Tab working-set KiB', scope: 'isolated_selected_run_not_real_user_screen', exhaustiveLeakTest: false }, null, 2));
+  await page.screenshot({ path: '/tmp/agent-monitor-large-timeline-native.png', fullPage: true });
+  console.log('PASS: 10k timeline pages/first-last/keyboard/selected-state/bounded10rows; renderer working set below1GiB in documented isolated scenario');
+} finally { if (app) await app.close(); await rm(root, { recursive: true, force: true }); }

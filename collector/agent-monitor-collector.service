@@ -1,0 +1,25 @@
+[Unit]
+Description=Agent Monitor metadata-only Codex collector
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=ubuntu
+Group=ubuntu
+Environment=AGENT_MONITOR_CLIENT_STATE=/home/ubuntu/.local/share/agent-monitor-collector/state
+ExecStart=/home/ubuntu/.local/share/agent-monitor-collector/runtime-install/node-v24.21.0-linux-arm64/bin/node /home/ubuntu/.local/share/agent-monitor-collector/collector.cjs run
+LoadCredentialEncrypted=token-inspector-device:/home/ubuntu/.local/share/agent-monitor-collector/state/device.cred
+Restart=on-failure
+RestartSec=15
+TimeoutStopSec=15
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/home/ubuntu/.local/share/agent-monitor-collector/state
+CapabilityBoundingSet=
+RestrictSUIDSGID=yes
+
+[Install]
+WantedBy=multi-user.target

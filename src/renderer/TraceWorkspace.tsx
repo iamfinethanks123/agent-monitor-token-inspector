@@ -222,11 +222,11 @@ export function TraceWorkspace({ agent, agents = [], onOpenAgent, onOpenAgents, 
         setEntries(nextEntries as TraceEntryDetails[]);
         setLoading(false);
       })
-      .catch(() => {
+      .catch(error => {
         if (cancelled) return;
         setEntries([]);
         setLoading(false);
-        setError('Trace could not be loaded from the native monitor.');
+        setError(String(error?.message).includes('PROJECT_SOURCE_PREVIEW_BLOCKED') ? 'Project privacy settings block this raw trace preview.' : 'Trace could not be loaded from the native monitor.');
       });
 
     return () => {

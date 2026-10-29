@@ -1,0 +1,14 @@
+.context-measures { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 18px 0; }
+.context-measures article { display: grid; gap: 6px; padding: 18px; border: 1px solid var(--border); background: var(--surface); border-radius: 12px; }
+.context-measures span, .context-measures small, .context-measures p { color: var(--muted); font-size: 12px; }
+.context-measures strong { font-size: 30px; font-variant-numeric: tabular-nums; }
+.context-measures p { margin: 4px 0; line-height: 1.5; }
+.context-origin-chart { display: grid; gap: 8px; margin: 18px 0; }
+.context-origin-chart button { display: grid; grid-template-columns: 150px minmax(80px,1fr) 110px; gap: 8px 14px; align-items: center; text-align: left; color: var(--text); border: 1px solid var(--border-subtle); border-radius: 9px; padding: 12px; background: var(--surface); cursor: pointer; font-size: 12px; }
+.context-origin-chart button.is-selected { border-color: var(--accent); background: var(--accent-wash); }
+.context-origin-chart i { height: 7px; background: var(--surface-3); border-radius: 8px; overflow: hidden; }
+.context-origin-chart b { height: 100%; display: block; background: var(--accent-deep); border-radius: 8px; }
+.context-origin-chart strong { text-align: right; font-variant-numeric: tabular-nums; }
+.context-origin-chart small { color: var(--muted); grid-column: 2 / 4; }
+.context-attribution details { margin-top: 18px; color: var(--muted); font-size: 12px; }
+@media (max-width: 800px) { .context-measures { grid-template-columns: 1fr; } .context-origin-chart button { grid-template-columns: 110px minmax(60px,1fr) 90px; } }
